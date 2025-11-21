@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barroblanco - Sistema de Asistencia PAE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="js/barroblanco-data.js"></script>
+   <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #22c55e, #3b82f6);
+            /* background: linear-gradient(135deg, #1e3a8a, #3b82f6); */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.show {
+            transform: translateX(0);
+        }
+        
+        .mobile-nav-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: block;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        .mobile-nav-item:hover {
+            background-color: #f3f4f6;
+            color: #1e3a8a;
+        }
+        
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-nav-button {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-nav-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo y Nombre -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-qrcode text-blue-800 text-2xl mr-3"></i>
+                        <span class="text-xl font-bold text-gray-800">Barroblanco PAE</span>
+                    </div>
+                </div>                
+                <!-- Desktop Navigation -->
+                <!-- esta clase pone en azul y con una linea debajo el item seleccionado class"nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2" -->
+                <div class="desktop-nav flex items-center space-x-6">
+                    <a href="index.html" class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
+                        <i class="fas fa-home mr-2"></i>Inicio</a>
+                    <a href="registro-mejorado.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-clipboard-check mr-2"></i>Registro</a>
+                    <a href="qr-generator.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-qrcode mr-2"></i>Códigos QR</a>
+                    <a href="reportes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
+                    <a href="estudiantes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-users mr-2"></i>Estudiantes</a>
+                </div>
+                
+                <!-- Mobile Navigation Button -->
+                <div class="mobile-nav-button flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-800 p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 ">
+            <div class="py-4">
+                <a href="index.html" class="mobile-nav-item text-blue-800">
+                    <i class="fas fa-home mr-3"></i>Inicio</a>
+                <a href="registro-mejorado.html" class="mobile-nav-item">
+                    <i class="fas fa-clipboard-check mr-3"></i>Registro</a>
+                <a href="qr-generator.html" class="mobile-nav-item active">
+                    <i class="fas fa-qrcode mr-3"></i>Códigos QR</a>
+                <a href="reportes-barroblanco.html" class="mobile-nav-item">
+                    <i class="fas fa-chart-bar mr-3"></i>Reportes</a>
+                <a href="estudiantes-barroblanco.html" class="mobile-nav-item">
+                    <i class="fas fa-users mr-3"></i>Estudiantes</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                        Sistema de <span class="gradient-text">Asistencia</span> PAE
+                    </h1>
+                    <p class="text-xl text-gray-600 leading-relaxed">
+                        Gestión integral del Programa de Alimentación Escolar en Barroblanco Institución. 
+                        Control de asistencia, registro de novedades y reportes detallados para las tres sedes.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button onclick="window.location.href='registro-mejorado.html'" class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-colors card-hover">
+                            <i class="fas fa-clipboard-list mr-2"></i>Registrar Asistencia
+                        </button>
+                        <button onclick="window.location.href='qr-registro.html'" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition-colors card-hover">
+                            <i class="fas fa-qrcode mr-2"></i>Auto-registro QR
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="resources/hero-cafeteria.jpg" alt="Cafetería escolar Barroblanco" class="rounded-2xl shadow-2xl w-full h-96 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+                    <div class="absolute bottom-4 left-4 text-white">
+                        <p class="text-sm font-medium">Barroblanco Institución Educativa</p>
+                        <p class="text-xs opacity-80">Rionegro, Antioquia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sedes Information -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Sedes Barroblanco</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Sede Principal -->
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-building text-blue-800 text-3xl mr-4"></i>
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-800">Sede Principal</h3>
+                            <p class="text-blue-600 text-sm">Grados 6° - 11°</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Horario:</strong> 7:00 AM - 1:00 PM</p>
+                        <p><strong>Grupos:</strong> 601-604, 701-703, 801-802, 901-902, 1001-1002, 1101-1102</p>
+                        <p><strong>Grupos Sordos:</strong> 604, 704, 804, 904, 1004, 1104</p>
+                        <p><strong>Estudiantes:</strong> <span id="principalStudents">847</span></p>
+                    </div>
+                </div>
+
+                <!-- Sede Primaria -->
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-child text-green-700 text-3xl mr-4"></i>
+                        <div>
+                            <h3 class="text-xl font-bold text-green-700">Sede Primaria</h3>
+                            <p class="text-green-600 text-sm">Educación Primaria</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Horario:</strong> 7:00 AM - 2:00 PM</p>
+                        <p><strong>Grupos:</strong> 101-106, 201-206, 301-306, 401-406, 501-506</p>
+                        <p><strong>Modalidad:</strong> Jornada Única</p>
+                        <p><strong>Estudiantes:</strong> <span id="primariaStudents">324</span></p>
+                    </div>
+                </div>
+
+                <!-- Sede María Inmaculada -->
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-church text-purple-700 text-3xl mr-4"></i>
+                        <div>
+                            <h3 class="text-xl font-bold text-purple-700">María Inmaculada</h3>
+                            <p class="text-purple-600 text-sm">Educación Primaria</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Horario:</strong> 7:00 AM - 2:00 PM</p>
+                        <p><strong>Grupos:</strong> 101-106, 201-206, 301-306, 401-406, 501-506</p>
+                        <p><strong>Modalidad:</strong> Jornada Única</p>
+                        <p><strong>Estudiantes:</strong> <span id="mariaStudents">289</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Stats -->
+    <section class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Estadísticas Generales</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Total Students -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Total Estudiantes</p>
+                            <p class="text-3xl font-bold text-blue-800" id="totalStudents">1,460</p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i class="fas fa-users text-blue-800 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-blue-800">En las 3 sedes</span>
+                    </div>
+                </div>
+
+                <!-- Present Today -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Presentes Hoy</p>
+                            <p class="text-3xl font-bold text-green-600" id="presentToday">1,342</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-green-600">91.9% asistencia</span>
+                    </div>
+                </div>
+
+                <!-- Absent Today -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Ausentes Hoy</p>
+                            <p class="text-3xl font-bold text-red-600" id="absentToday">118</p>
+                        </div>
+                        <div class="bg-red-100 p-3 rounded-full">
+                            <i class="fas fa-times-circle text-red-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-red-600">8.1% inasistencia</span>
+                    </div>
+                </div>
+
+                <!-- Pending Registration -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Novedades</p>
+                            <p class="text-3xl font-bold text-yellow-600" id="pendingToday">23</p>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-full">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-yellow-600">Requieren atención</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Attendance Chart -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Tendencia de Asistencia</h3>
+                    <div id="attendanceChart" style="height: 300px;"></div>
+                </div>
+
+                <!-- Sedes Comparison -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Asistencia por Sede</h3>
+                    <div id="sedeChart" style="height: 300px;"></div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Acciones Rápidas</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <button onclick="window.location.href='registro.html'" class="flex items-center justify-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                        <i class="fas fa-clipboard-list text-blue-600 text-2xl mr-3"></i>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-800">Registrar Asistencia</div>
+                            <div class="text-sm text-gray-600">Por grupo y sede</div>
+                        </div>
+                    </button>
+                    <button onclick="window.location.href='qr-registro.html'" class="flex items-center justify-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                        <i class="fas fa-qrcode text-green-600 text-2xl mr-3"></i>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-800">Auto-registro QR</div>
+                            <div class="text-sm text-gray-600">Para estudiantes</div>
+                        </div>
+                    </button>
+                    <button onclick="window.location.href='reportes.html'" class="flex items-center justify-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
+                        <i class="fas fa-chart-bar text-purple-600 text-2xl mr-3"></i>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-800">Ver Reportes</div>
+                            <div class="text-sm text-gray-600">Estadísticas y datos</div>
+                        </div>
+                    </button>
+                    <button onclick="window.location.href='estudiantes.html'" class="flex items-center justify-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
+                        <i class="fas fa-users text-yellow-600 text-2xl mr-3"></i>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-800">Gestionar Estudiantes</div>
+                            <div class="text-sm text-gray-600">Agregar, editar, consultar</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-6">Actividad Reciente</h3>
+                <div class="space-y-4" id="recentActivity">
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                        <div class="bg-green-100 p-2 rounded-full mr-4">
+                            <i class="fas fa-user-check text-green-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800">Valentina Jurado H - Grado 1101</p>
+                            <p class="text-sm text-gray-600">Sede Principal • Recibió alimento • Hace 5 minutos</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                        <div class="bg-red-100 p-2 rounded-full mr-4">
+                            <i class="fas fa-user-times text-red-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800">Carlos Rodríguez L - Grado 1101</p>
+                            <p class="text-sm text-gray-600">Sede Principal • No recibió (Alergia) • Hace 12 minutos</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                        <div class="bg-blue-100 p-2 rounded-full mr-4">
+                            <i class="fas fa-file-export text-blue-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-800">Reporte Diario Generado</p>
+                            <p class="text-sm text-gray-600">Consolidado por sedes • Hace 1 hora</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar. Todos los derechos reservados.</p>
+            <p class="text-gray-500 text-sm mt-2">Rionegro, Antioquia - Colombia</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('show');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileButton = document.querySelector('.mobile-nav-button button');
+            
+            if (!mobileMenu.contains(e.target) && !mobileButton.contains(e.target)) {
+                mobileMenu.classList.remove('show');
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stats on load
+            anime({
+                targets: '.card-hover',
+                translateY: [20, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(100),
+                duration: 800,
+                easing: 'easeOutQuart'
+            });
+
+            // Initialize attendance chart
+            const attendanceChart = echarts.init(document.getElementById('attendanceChart'));
+            const attendanceOption = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie']
+                },
+                yAxis: {
+                    type: 'value',
+                    max: 100,
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                },
+                series: [{
+                    data: [94, 92, 95, 96, 93],
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        color: '#1e3a8a'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0, y: 0, x2: 0, y2: 1,
+                            colorStops: [{
+                                offset: 0, color: 'rgba(30, 58, 138, 0.3)'
+                            }, {
+                                offset: 1, color: 'rgba(30, 58, 138, 0.05)'
+                            }]
+                        }
+                    }
+                }]
+            };
+            attendanceChart.setOption(attendanceOption);
+
+            // Initialize sede chart
+            const sedeChart = echarts.init(document.getElementById('sedeChart'));
+            const sedeOption = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [{
+                    type: 'pie',
+                    radius: '70%',
+                    data: [
+                        { value: 847, name: 'Sede Principal' },
+                        { value: 324, name: 'Sede Primaria' },
+                        { value: 289, name: 'María Inmaculada' }
+                    ],
+                    color: ['#1e3a8a', '#059669', '#7c3aed']
+                }]
+            };
+            sedeChart.setOption(sedeOption);
+
+            // Animate numbers
+            animateNumber('totalStudents', 1460);
+            animateNumber('presentToday', 1342);
+            animateNumber('absentToday', 118);
+            animateNumber('pendingToday', 23);
+        });
+
+        function animateNumber(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            let currentValue = 0;
+            const increment = targetValue / 50;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(currentValue).toLocaleString();
+            }, 30);
+        }
+
+        // Add pulse animation to important elements
+        setInterval(() => {
+            const presentToday = document.getElementById('presentToday');
+            presentToday.classList.add('pulse-animation');
+            setTimeout(() => {
+                presentToday.classList.remove('pulse-animation');
+            }, 2000);
+        }, 10000);
+
+        // Responsive chart resize
+        window.addEventListener('resize', function() {
+            attendanceChart.resize();
+            sedeChart.resize();
+        });
+    </script>
+</body>
+</html>

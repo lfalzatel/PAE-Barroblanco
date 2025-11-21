@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Asistencia - Barroblanco PAE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="js/barroblanco-data.js"></script>
+    <!-- <script>
+fetch("js/estudiantes-bachillerato.json")
+  .then(response => response.json())
+  .then(data => {
+      window.BB_GROUPS = data.groups;
+      window.BB_STUDENTS = data.students;
+      console.log("Datos del JSON cargados correctamente");
+  })
+  .catch(err => console.error("Error cargando JSON:", err));
+</script>
+
+<script>
+  cargarDatosPAE().then(() => inicializarPAE());
+</script> -->
+<!-- <script>
+  // Cargar datos del JSON cuando se cargue la página
+  document.addEventListener('DOMContentLoaded', function() {
+      cargarDatosPAE().then(() => {
+          console.log('✅ Sistema PAE inicializado con datos del JSON');
+      }).catch(err => {
+          console.error('❌ Error cargando datos PAE:', err);
+      });
+  });
+</script> -->
+<script>
+  // Variable global para verificar si los datos están cargados
+  let datosJSONCargados = false;
+  
+  // Cargar datos del JSON cuando se cargue la página
+  document.addEventListener('DOMContentLoaded', function() {
+      console.log('🔄 Iniciando carga de datos PAE...');
+      
+      cargarDatosPAE().then(() => {
+          datosJSONCargados = true;
+          console.log('✅ Sistema PAE inicializado con datos del JSON');
+          console.log('📊 Total de estudiantes cargados:', BARROBLANCO_DATA.students ? BARROBLANCO_DATA.students.length : 0);
+          
+          // Mostrar notificación visual
+          if (typeof showNotification === 'function') {
+              showNotification('Datos de estudiantes cargados correctamente', 'success');
+          }
+      }).catch(err => {
+          console.error('❌ Error cargando datos PAE:', err);
+          if (typeof showNotification === 'function') {
+              showNotification('Error cargando datos de estudiantes', 'error');
+          }
+      });
+  });
+</script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .student-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-received {
+            border-left: 4px solid #22c55e;
+        }
+        
+        .status-not-received {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .status-not-attended {
+            border-left: 4px solid #6b7280;
+        }
+        
+        .status-pending {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-received {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .badge-not-received {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-not-attended {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .badge-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .search-input {
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        
+        .modal {
+            transition: all 0.3s ease;
+        }
+        
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .attendance-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .attendance-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .attendance-option.selected {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .sede-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .sede-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sede-card.selected {
+            border: 2px solid #1e3a8a;
+            background: #eff6ff;
+        }
+        
+        .group-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .group-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .group-card.selected {
+            border: 2px solid #1e3a8a;
+            background: #eff6ff;
+        }
+        
+        .special-group {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .mobile-nav-button {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-nav-button {
+                display: block;
+            }
+        }
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.show {
+            transform: translateX(0);
+        }
+        
+        .mobile-nav-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: block;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        .mobile-nav-item:hover {
+            background-color: #f3f4f6;
+            color: #1e3a8a;
+        }
+        
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-nav-button {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-nav-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+<!-- <button id="guardarBtn">Guardar asistencia</button> -->
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-utensils text-blue-800 text-2xl mr-3"></i>
+                        <span class="text-xl font-bold text-gray-800">Barroblanco PAE</span>
+                    </div>
+                </div>
+                <!-- Desktop Navigation -->
+                <!-- esta clase pone en azul y con una linea debajo el item seleccionado class"nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2" -->
+                <div class="desktop-nav flex items-center space-x-6">
+                    <a href="index.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-home mr-2"></i>Inicio</a>
+                    <a href="registro-mejorado.html" class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
+                        <i class="fas fa-clipboard-check mr-2"></i>Registro</a>
+                    <a href="qr-generator.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-qrcode mr-2"></i>Códigos QR</a>
+                    <a href="reportes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
+                    <a href="estudiantes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                        <i class="fas fa-users mr-2"></i>Estudiantes</a>
+                </div>
+                
+                <!-- Mobile Navigation Button -->
+                <div class="mobile-nav-button flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-800 p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 "> <!-- lg:hidden oculta el elemento cuando la pantalla es grande, por lo cual el toggle no se activa -->
+            <div class="py-4">
+                <a href="index.html" class="mobile-nav-item">
+                    <i class="fas fa-home mr-3"></i>Inicio</a>
+                <a href="registro-mejorado.html" class="mobile-nav-item text-blue-800">
+                    <i class="fas fa-clipboard-check mr-3"></i>Registro</a>
+                <a href="qr-generator.html" class="mobile-nav-item active">
+                    <i class="fas fa-qrcode mr-3"></i>Códigos QR</a>
+                <a href="reportes-barroblanco.html" class="mobile-nav-item">
+                    <i class="fas fa-chart-bar mr-3"></i>Reportes</a>
+                <a href="estudiantes-barroblanco.html" class="mobile-nav-item">
+                    <i class="fas fa-users mr-3"></i>Estudiantes</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="pt-20 pb-8 bg-gradient-to-r from-blue-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Registro de Asistencia PAE</h1>
+                <p class="text-xl text-gray-600 mb-6">Fecha: <span id="currentDate"></span></p>
+                
+                <!-- Sede Selection -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 max-w-4xl mx-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Seleccionar Sede</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="sedeSelection">
+                        <!-- Sedes will be loaded here dynamically -->
+                    </div>
+                    
+                    <!-- Group Selection -->
+                    <div id="groupSelection" class="hidden">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Seleccionar Grupo</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3" id="groupGrid">
+                            <!-- Groups will be loaded here dynamically -->
+                        </div>
+                        <div class="flex justify-center mt-6">
+                            <button onclick="loadSelectedGroup()" id="loadGroupBtn" class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                <i class="fas fa-users mr-2"></i>Cargar Estudiantes del Grupo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="markAllStatus('received')" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-check-double mr-2"></i>Todos Recibieron
+                    </button>
+                    <button onclick="openBulkNoveltyModal()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Registrar Novedad Masiva
+                    </button>
+                    <button onclick="saveAttendance()" class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-save mr-2"></i>Guardar Registro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Progress Bar -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-gray-700">Progreso de Registro</span>
+                    <span class="text-sm font-medium text-gray-700" id="progressText">0 / 0</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="bg-blue-800 h-3 rounded-full transition-all duration-500" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green-600" id="receivedCount">0</div>
+                        <div class="text-sm text-gray-600">Recibieron</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-red-600" id="notReceivedCount">0</div>
+                        <div class="text-sm text-gray-600">No Recibieron</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-gray-600" id="notAttendedCount">0</div>
+                        <div class="text-sm text-gray-600">No Asistieron</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-yellow-600" id="pendingCount">0</div>
+                        <div class="text-sm text-gray-600">Pendientes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="studentsGrid">
+                <!-- Students will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Novelty Modal -->
+    <div id="noveltyModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
+        <div class="modal-content bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-semibold text-gray-800">Registrar Novedad</h3>
+                    <button onclick="closeNoveltyModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="noveltyForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Novedad</label>
+                        <select id="noveltyType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
+                            <option value="">Seleccionar tipo</option>
+                            <option value="alergia">Reacción Alérgica</option>
+                            <option value="rechazo">Rechazo del Alimento</option>
+                            <option value="calidad">Problema de Calidad</option>
+                            <option value="cantidad">Porción Insuficiente</option>
+                            <option value="retraso">Entrega con Retraso</option>
+                            <option value="falta">Alimento No Entregado</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Descripción de la Novedad</label>
+                        <textarea id="noveltyDescription" rows="4" 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800"
+                                  placeholder="Describa detalladamente la novedad ocurrida..."></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Gravedad</label>
+                            <select id="noveltySeverity" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
+                                <option value="baja">Baja</option>
+                                <option value="media">Media</option>
+                                <option value="alta">Alta</option>
+                                <option value="critica">Crítica</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">¿Requiere Seguimiento?</label>
+                            <select id="noveltyFollowUp" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
+                                <option value="no">No</option>
+                                <option value="si">Sí</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-4 pt-4">
+                        <button type="button" onclick="closeNoveltyModal()" 
+                                class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit" 
+                                class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors">
+                            <i class="fas fa-save mr-2"></i>Registrar Novedad
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Modal -->
+    <div id="qrModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
+        <div class="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full mx-4">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-gray-800">Código QR de Auto-registro</h3>
+                    <button onclick="closeQRModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 text-center">
+                <div id="qrCode" class="qr-container mb-4"></div>
+                <p class="text-sm text-gray-600 mb-4">Escanea este código para registrar tu asistencia</p>
+                <div class="space-y-2">
+                    <p class="text-lg font-semibold text-gray-800" id="qrStudentName"></p>
+                    <p class="text-sm text-gray-600" id="qrStudentGrade"></p>
+                    <p class="text-xs text-gray-500" id="qrValidUntil"></p>
+                </div>
+                <div class="mt-4">
+                    <button onclick="generateNewQRCode()" class="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg text-sm transition-colors mr-2">
+                        <i class="fas fa-sync-alt mr-1"></i>Nuevo Código
+                    </button>
+                    <button onclick="downloadQRCode()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        <i class="fas fa-download mr-1"></i>Descargar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ========================================
+        // SISTEMA DE IMÁGENES DE ESTUDIANTES
+        // ========================================
+        
+        // Pool de imágenes de estudiantes MUJERES (Unsplash)
+        const IMAGENES_MUJERES = [
+            'photo-1494790108377-be9c29b29330', // Mujer joven sonriente
+            'photo-1438761681033-6461ffad8d80', // Mujer con gafas
+            'photo-1544005313-94ddf0286df2', // Mujer profesional
+            'photo-1489424731084-a5d8b219a5bb', // Mujer con cabello oscuro
+            'photo-1487412720507-e7ab37603c6f', // Mujer con cabello castaño
+            'photo-1534528741775-53994a69daeb', // Mujer joven natural
+            'photo-1517841905240-472988babdf9', // Mujer con sonrisa
+            'photo-1524504388940-b1c1722653e1', // Mujer moderna
+            'photo-1507003211169-0a1dd7228f2d', // Mujer con cabello largo
+            'photo-1531746020798-e6953c6e8e04', // Mujer joven elegante
+            'photo-1529626455594-4ff0802cfb7e', // Mujer con estilo casual
+            'photo-1506634572416-48cdfe530110', // Mujer con cabello rubio
+            'photo-1525134479668-1bee5c7c6845', // Mujer sonriente
+            'photo-1541823709867-1b206113eafd', // Mujer joven moderna
+            'photo-1532074205216-d0e1f4b87368', // Mujer con expresión amable
+            'photo-1502378735452-bc7d86632805', // Mujer profesional joven
+            'photo-1521146764736-56c929d59c83', // Mujer con sonrisa brillante
+            'photo-1522075469751-3a6694fb2f61', // Mujer con actitud positiva
+            'photo-1485875437342-9b39470b3d95', // Mujer con estilo urbano
+            'photo-1499952127939-9bbf5af6c51c', // Mujer joven natural
+            'photo-1501386761578-eac5c94b800a', // Mujer con cabello oscuro
+            'photo-1508214751196-bcfd4ca60f91', // Mujer elegante
+            'photo-1527631746610-bca00a040d60', // Mujer sonriente casual
+            'photo-1530268729831-4b0b9e170218', // Mujer joven moderna
+            'photo-1542596594-649edbc13630', // Mujer con estilo
+            'photo-1558499932-9609acb6f443', // Mujer joven alegre
+            'photo-1519648023493-d82b5f8d7b8a', // Mujer profesional
+            'photo-1551069613-1904dbdcda11', // Mujer con sonrisa
+            'photo-1539571696357-5a69c17a67c6', // Mujer moderna
+            'photo-1550314124-301ca0b773ae'  // Mujer joven casual
+        ];
+
+        // Pool de imágenes de estudiantes HOMBRES (Unsplash)
+        const IMAGENES_HOMBRES = [
+            'photo-1506794778202-cad84cf45f1d', // Hombre joven sonriente
+            'photo-1500648767791-00dcc994a43e', // Hombre con barba
+            'photo-1519085360753-af0119f7cbe7', // Hombre profesional
+            'photo-1507003211169-0a1dd7228f2d', // Hombre casual
+            'photo-1492562080023-ab3db95bfbce', // Hombre sonriente
+            'photo-1499996860823-5214fcc65f8f', // Hombre joven moderno
+            'photo-1522556189639-b150ed9c4330', // Hombre con gafas
+            'photo-1504257432389-52343af06ae3', // Hombre elegante
+            'photo-1520409364224-63400afe26e5', // Hombre joven casual
+            'photo-1488426862026-3ee34a7d66df', // Hombre con actitud
+            'photo-1539571696357-5a69c17a67c6', // Hombre profesional
+            'photo-1495603889488-42d1d66e5523', // Hombre sonriente
+            'photo-1501196354995-cbb51c65aaea', // Hombre joven moderno
+            'photo-1507114845806-0347f6150324', // Hombre casual
+            'photo-1531427186611-ecfd6d936c79', // Hombre con estilo
+            'photo-1480455624313-e29b44bbfde1', // Hombre alegre
+            'photo-1463453091185-61582044d556', // Hombre joven natural
+            'photo-1498050108023-c5249f4df085', // Hombre con laptop
+            'photo-1504257432389-52343af06ae3', // Hombre elegante
+            'photo-1542178243-bc20204b769f', // Hombre moderno
+            'photo-1552374196-c4e7ffc6e126', // Hombre joven
+            'photo-1546539782-6fc531453083', // Hombre sonriente
+            'photo-1519085360753-af0119f7cbe7', // Hombre casual elegante
+            'photo-1566492031773-4f4e44671857', // Hombre joven profesional
+            'photo-1521146764736-56c929d59c83', // Hombre con sonrisa
+            'photo-1489980557514-251d61e3eeb6', // Hombre casual
+            'photo-1527980965255-d3b416303d12', // Hombre moderno
+            'photo-1499638673689-79a0b5115d87', // Hombre sonriente
+            'photo-1560250097-0b93528c311a', // Hombre joven
+            'photo-1506794778202-cad84cf45f1d'  // Hombre alegre
+        ];
+
+        // Nombres comunes femeninos en Colombia
+        const NOMBRES_FEMENINOS = [
+            'MARIA', 'ANA', 'SOFIA', 'VALENTINA', 'ISABELLA', 'CAMILA', 'VALERIA', 
+            'DANIELA', 'PAULA', 'ALEJANDRA', 'ANDREA', 'CAROLINA', 'LAURA', 'SARA', 
+            'NATALIA', 'JULIANA', 'CATALINA', 'GABRIELA', 'LUISA', 'MARIANA',
+            'KATHERINE', 'MELISSA', 'DIANA', 'PAOLA', 'JESSICA', 'TATIANA',
+            'MANUELA', 'LUNA', 'EMMA', 'MIA', 'LUCIANA', 'ANTONELLA', 'EMILIA',
+            'GUADALUPE', 'SAMANTHA', 'HELEN', 'NICKEL', 'ASHLEY', 'NAOMI', 
+            'GREYSI', 'ROXANA', 'ERIKA', 'SUSANA', 'LUISA', 'NATHALY', 'JUDITH',
+            'GERALDINE', 'ESTEFANIA', 'KAROL', 'KAREN', 'YULIANA', 'MARLON',
+            'SALOME', 'ZAIRA', 'TATIANA', 'JOHALICE', 'ADRIANA', 'ISABEL', 
+            'DOMINIQUE', 'PAULINA', 'ANTONIA', 'NICOLE', 'SHERLI', 'JULIETA',
+            // Nombres adicionales del dataset real
+            'MELISA', 'DULCE', 'ALISSON', 'VICTORIA', 'ANGELICA', 'VIOLETTA',
+            'XIMENA', 'KATHERIN', 'RICHARID', 'SHERLI', 'AIRAM', 'MARIANA',
+            'TALEF', 'GUADALUPE', 'ANGELICA', 'KEYLA', 'YEISON', 'DANNA',
+            'VALENTINA', 'ISABELA', 'DANIELA', 'MARTINA', 'EMILY', 'FERNANDA',
+            'JAZMIN', 'ALEXA', 'VALERY', 'VERONICA', 'PILAR', 'ADRIANA',
+            'FATIMA', 'CARMEN', 'BEATRIZ', 'CLAUDIA', 'MARCELA', 'PAOLA'
+        ];
+
+        // Nombres comunes masculinos en Colombia
+        const NOMBRES_MASCULINOS = [
+            'JUAN', 'CARLOS', 'DAVID', 'ANDRES', 'JOSE', 'LUIS', 'SANTIAGO',
+            'SEBASTIAN', 'ALEJANDRO', 'MIGUEL', 'DANIEL', 'DIEGO', 'MATEO',
+            'SAMUEL', 'JERONIMO', 'NICOLAS', 'FELIPE', 'CRISTIAN', 'OSCAR',
+            'MANUEL', 'PABLO', 'JAVIER', 'RICARDO', 'FERNANDO', 'EDUARDO',
+            'EMILIANO', 'CHRISTOPHER', 'SIMON', 'JULIAN', 'DYLAN', 'IAN',
+            'MATIAS', 'TOMAS', 'ESTEBAN', 'ERIK', 'JHOAN', 'JHOJAN', 'KEINER',
+            'MARWIN', 'EDUARDO', 'DIEGO', 'VICTOR', 'ALFONSO', 'EVER', 'ALEXIS',
+            'MAURICIO', 'EVER', 'STEVEN', 'EMANUEL', 'JESUS', 'PABLO', 'ANTONIO',
+            'DOMINICK', 'CAMILO', 'MATTHEW', 'RICHARD',
+            // Nombres adicionales del dataset real
+            'TALEF', 'JHOJAN', 'KEINER', 'MARWIN', 'ERICK', 'DOMINICK',
+            'FERNANDO', 'SUSEJ', 'RICHARID', 'BRAYAN', 'ANDERSON', 'STIVEN',
+            'BRAHIAN', 'JUSTIN', 'ALEXANDER', 'YEISON', 'BRAINER', 'WILMER',
+            'JEFERSON', 'YEFERSON', 'ANDER', 'YULIAN', 'BRAYAN', 'CRISTOPHER',
+            'BRANDON', 'KEVIN', 'STIVEN', 'YERSON', 'YEISON', 'JEISON',
+            'ROBINSON', 'NELSON', 'FABIAN', 'ADRIAN', 'LEONARDO', 'RAFAEL',
+            'CESAR', 'MARIO', 'ALBERTO', 'HECTOR', 'SERGIO', 'RODRIGO'
+        ];
+
+        /**
+         * Detecta el género basándose en el nombre
+         * @param {string} nombreCompleto - Nombre completo del estudiante
+         * @returns {string} 'M' para masculino, 'F' para femenino, 'U' si es incierto
+         */
+        function detectarGenero(nombreCompleto) {
+            if (!nombreCompleto) return 'U';
+            
+            const nombreUpper = nombreCompleto.toUpperCase();
+            const palabras = nombreUpper.split(' ').filter(p => p.length > 0);
+            
+            // PRIMERO: Buscar nombres específicos en TODO el nombre completo
+            // (esto funciona tanto para "VALERIA JURADO" como "AREIZA GIL VALERIA")
+            for (const palabra of palabras) {
+                if (NOMBRES_FEMENINOS.some(nombre => palabra.includes(nombre) || nombre.includes(palabra))) {
+                    return 'F';
+                }
+            }
+            
+            for (const palabra of palabras) {
+                if (NOMBRES_MASCULINOS.some(nombre => palabra.includes(nombre) || nombre.includes(palabra))) {
+                    return 'M';
+                }
+            }
+            
+            // SEGUNDO: Si no se encuentra, analizar las ÚLTIMAS palabras (son los nombres, no apellidos)
+            // En formato colombiano: "AREIZA GIL VALERIA" → las últimas 1-2 palabras son nombres
+            const ultimaPalabra = palabras[palabras.length - 1];
+            const penultimaPalabra = palabras.length > 1 ? palabras[palabras.length - 2] : '';
+            
+            // Analizar terminaciones de las ÚLTIMAS palabras (nombres reales)
+            if (ultimaPalabra) {
+                // Terminaciones típicamente femeninas
+                if ((ultimaPalabra.endsWith('A') && !ultimaPalabra.endsWith('CIA') && !ultimaPalabra.endsWith('RIA')) ||
+                    ultimaPalabra.endsWith('IE') || 
+                    ultimaPalabra.endsWith('ELA') || 
+                    ultimaPalabra.endsWith('INA') ||
+                    ultimaPalabra.endsWith('ETH') ||
+                    ultimaPalabra.endsWith('LY')) {
+                    return 'F';
+                }
+            }
+            
+            // Analizar también la penúltima palabra (nombres compuestos como "MARIA VICTORIA")
+            if (penultimaPalabra) {
+                if (NOMBRES_FEMENINOS.some(nombre => penultimaPalabra.includes(nombre))) {
+                    return 'F';
+                }
+                if (NOMBRES_MASCULINOS.some(nombre => penultimaPalabra.includes(nombre))) {
+                    return 'M';
+                }
+            }
+            
+            // Por defecto masculino si no se puede determinar con certeza
+            return 'M';
+        }
+
+        /**
+         * Obtiene una imagen consistente para un estudiante
+         * @param {Object} student - Objeto del estudiante con id y name
+         * @returns {string} URL de la imagen de Unsplash
+         */
+        function obtenerImagenEstudiante(student) {
+            if (!student || !student.id || !student.name) {
+                console.warn('⚠️ Student sin datos completos:', student);
+                return 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face';
+            }
+            
+            const genero = detectarGenero(student.name);
+            const imagenesPool = genero === 'F' ? IMAGENES_MUJERES : IMAGENES_HOMBRES;
+            
+            // Usar el ID del estudiante para generar un índice consistente
+            let hash = 0;
+            for (let i = 0; i < student.id.length; i++) {
+                hash = ((hash << 5) - hash) + student.id.charCodeAt(i);
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            
+            // Convertir a índice positivo
+            const index = Math.abs(hash) % imagenesPool.length;
+            const imageId = imagenesPool[index];
+            
+            // Retornar URL completa de Unsplash con parámetros optimizados
+            const imageUrl = `https://images.unsplash.com/${imageId}?w=150&h=150&fit=crop&crop=face`;
+            
+            // Log solo para primeros 3 estudiantes (evitar spam en consola)
+            if (window.imageDebugCount === undefined) window.imageDebugCount = 0;
+            if (window.imageDebugCount < 3) {
+                console.log(`📸 ${student.name} → ${genero === 'F' ? '👩' : '👨'} ${genero} → ${imageUrl}`);
+                window.imageDebugCount++;
+            }
+            
+            return imageUrl;
+        }
+        
+        // Enhanced student data with complete information
+        const students = [];
+
+        // Estado global de la aplicación
+        let currentSede = null;
+        let currentGroup = null;
+        let attendanceStatus = {};
+        let filteredStudents = [...students];
+        let selectedStudentForNovelty = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date
+            const today = new Date();
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('es-CO', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Load sedes
+            loadSedes();
+
+            // Add event listeners
+            document.getElementById('noveltyForm').addEventListener('submit', saveNovelty);
+
+            // Mobile menu functionality
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('show');
+            };
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const mobileButton = document.querySelector('.mobile-nav-button button');
+                
+                if (!mobileMenu.contains(e.target) && !mobileButton.contains(e.target)) {
+                    mobileMenu.classList.remove('show');
+                }
+            });
+        });
+
+        function loadSedes() {
+            const sedeSelection = document.getElementById('sedeSelection');
+            const sedes = BARROBLANCO_DATA.methods.getAllSedes();
+            
+            sedeSelection.innerHTML = '';
+            
+            sedes.forEach(sede => {
+                const card = document.createElement('div');
+                card.className = 'sede-card bg-white rounded-lg p-4 border-2 border-gray-200';
+                card.onclick = () => selectSede(sede.id);
+                
+                const iconClass = sede.id === 'principal' ? 'fa-building' : 
+                                 sede.id === 'primaria' ? 'fa-child' : 'fa-church';
+                const bgClass = sede.id === 'principal' ? 'from-blue-50 to-blue-100' :
+                               sede.id === 'primaria' ? 'from-green-50 to-green-100' :
+                               'from-purple-50 to-purple-100';
+                
+                card.innerHTML = `
+                    <div class="flex items-center mb-3">
+                        
+                        <i class="fas ${iconClass} text-2xl mr-3 ${sede.id === 'principal' ? 'text-blue-800' : 
+                           sede.id === 'primaria' ? 'text-green-700' : 'text-purple-700'}"></i>
+                        <div>
+                            <h3 class="font-bold text-gray-800">${sede.name}</h3>
+                            <p class="text-sm text-gray-600">${sede.grades}</p>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        <p><strong>Horario:</strong> ${sede.schedule}</p>
+                        <p><strong>Estudiantes:</strong> ${sede.totalStudents}</p>
+                    </div>
+                `;
+                
+                sedeSelection.appendChild(card);
+            });
+        }
+
+        function selectSede(sedeId) {
+            // Remove previous selection
+            document.querySelectorAll('.sede-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked card
+            event.currentTarget.classList.add('selected');
+            
+            currentSede = sedeId;
+            loadGroupsBySede(sedeId);
+            
+            // Show group selection
+            document.getElementById('groupSelection').classList.remove('hidden');
+        }
+
+        function loadGroupsBySede(sedeId) {
+            const groups = BARROBLANCO_DATA.methods.getGroupsBySede(sedeId);
+            const groupGrid = document.getElementById('groupGrid');
+            
+            groupGrid.innerHTML = '';
+            
+            groups.forEach(group => {
+                const card = document.createElement('div');
+                card.className = `group-card bg-white rounded-lg p-3 border-2 border-gray-200 text-center ${group.type === 'sordos' ? 'special-group' : ''}`;
+                card.onclick = () => selectGroup(group.id);
+                
+                card.innerHTML = `
+                    <div class="font-bold text-gray-800">${group.name}</div>
+                    <div class="text-sm text-gray-600">${group.grade}</div>
+                    <div class="text-xs text-gray-500">${group.students} estudiantes</div>
+                    ${group.type === 'sordos' ? '<div class="text-xs text-yellow-600 font-medium">Sordos</div>' : ''}
+                `;
+                
+                groupGrid.appendChild(card);
+            });
+        }
+
+        function selectGroup(groupId) {
+            // Remove previous selection
+            document.querySelectorAll('.group-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked card
+            event.currentTarget.classList.add('selected');
+            
+            currentGroup = groupId;
+            
+            // Enable load button
+            const loadBtn = document.getElementById('loadGroupBtn');
+            loadBtn.disabled = false;
+            loadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        function loadSelectedGroup() {
+            if (!currentSede || !currentGroup) {
+                showNotification('Por favor seleccione sede y grupo', 'warning');
+                return;
+            }
+            
+            const group = BARROBLANCO_DATA.methods.getGroupById(currentGroup);
+            const students = BARROBLANCO_DATA.methods.getStudentsBySede(currentSede)
+                .filter(s => s.groupId === currentGroup);
+            
+            filteredStudents = students;
+            
+            // Initialize attendance status
+            students.forEach(student => {
+                attendanceStatus[student.id] = {
+                    status: 'pending',
+                    novelty: null,
+                    timestamp: null
+                };
+            });
+            
+            renderStudentsGrid();
+            updateProgress();
+            updateCounts();
+            
+            showNotification(`Cargados ${students.length} estudiantes del grupo ${group.name}`, 'success');
+        }
+
+        function renderStudentsGrid() {
+            const grid = document.getElementById('studentsGrid');
+            grid.innerHTML = '';
+
+            filteredStudents.forEach(student => {
+                const status = attendanceStatus[student.id].status;
+                const card = document.createElement('div');
+                card.className = `student-card status-${status} bg-white rounded-xl shadow-lg p-4`;
+                
+                const isSordos = student.type === 'sordos';
+                const sordosBadge = isSordos ? '<div class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Sordos</div>' : '';
+                
+                card.innerHTML = `
+                    <div class="relative">
+                        ${sordosBadge}
+                        <div class="flex items-center space-x-4 mb-4">
+                            <!-- <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-800 text-xl"></i>
+                            </div> -->
+                            <img src="${obtenerImagenEstudiante(student)}" alt="${student.name}" class="w-16 h-16 rounded-full object-cover">
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-semibold text-gray-800 text-sm ">${student.name}</h3>
+                                <p class="text-gray-600 text-xs">${student.grade}</p>
+                                <p class="text-gray-500 text-xs">ID: ${student.id}</p>
+                                <span class="status-badge badge-${status} mt-2">
+                                    ${getStatusIcon(status)} ${getStatusText(status)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Attendance Options -->
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <button onclick="markAttendance('${student.id}', 'received')" 
+                                class="attendance-option ${status === 'received' ? 'selected bg-green-500 text-white' : 'bg-green-100 text-green-600'} p-2 rounded-lg text-xs font-medium transition-all">
+                            <i class="fas fa-utensils block mb-1"></i>
+                            Recibió
+                        </button>
+                        <button onclick="markAttendance('${student.id}', 'not-received')" 
+                                class="attendance-option ${status === 'not-received' ? 'selected bg-red-500 text-white' : 'bg-red-100 text-red-600'} p-2 rounded-lg text-xs font-medium transition-all">
+                            <i class="fas fa-times block mb-1"></i>
+                            No Recibió
+                        </button>
+                        <button onclick="markAttendance('${student.id}', 'not-attended')" 
+                                class="attendance-option ${status === 'not-attended' ? 'selected bg-gray-500 text-white' : 'bg-gray-100 text-gray-600'} p-2 rounded-lg text-xs font-medium transition-all">
+                            <i class="fas fa-user-slash block mb-1"></i>
+                            No Asistió
+                        </button>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-2">
+                        <button onclick="openNoveltyModal('${student.id}')" 
+                                class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-lg text-xs transition-colors">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>Novedad
+                        </button>
+                        <button onclick="generateStudentQR('${student.id}')" 
+                                class="flex-1 bg-blue-800 hover:bg-blue-900 text-white py-2 px-3 rounded-lg text-xs transition-colors">
+                            <i class="fas fa-qrcode mr-1"></i>QR
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Animate cards
+            anime({
+                targets: '.student-card',
+                translateY: [20, 0],
+                opacity: [0, 1],
+                delay: anime.stagger(50),
+                duration: 400,
+                easing: 'easeOutQuart'
+            });
+        }
+
+        function markAttendance(studentId, status) {
+            attendanceStatus[studentId] = {
+                status: status,
+                timestamp: new Date().toISOString()
+            };
+            
+            renderStudentsGrid();
+            updateProgress();
+            updateCounts();
+            
+            const student = filteredStudents.find(s => s.id === studentId);
+            showNotification(`Asistencia registrada: ${student.name} - ${getStatusText(status)}`, 'success');
+        }
+
+        function markAllStatus(status) {
+            if (filteredStudents.length === 0) {
+                showNotification('No hay estudiantes cargados', 'warning');
+                return;
+            }
+            
+            filteredStudents.forEach(student => {
+                attendanceStatus[student.id] = {
+                    status: status,
+                    timestamp: new Date().toISOString()
+                };
+            });
+            
+            renderStudentsGrid();
+            updateProgress();
+            updateCounts();
+            
+            showNotification(`Todos los estudiantes marcados como: ${getStatusText(status)}`, 'success');
+        }
+
+        function updateProgress() {
+            const total = filteredStudents.length;
+            const completed = filteredStudents.filter(student => attendanceStatus[student.id].status !== 'pending').length;
+            const percentage = total > 0 ? (completed / total) * 100 : 0;
+
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+            document.getElementById('progressText').textContent = `${completed} / ${total}`;
+        }
+
+        function updateCounts() {
+            const received = filteredStudents.filter(s => attendanceStatus[s.id].status === 'received').length;
+            const notReceived = filteredStudents.filter(s => attendanceStatus[s.id].status === 'not-received').length;
+            const notAttended = filteredStudents.filter(s => attendanceStatus[s.id].status === 'not-attended').length;
+            const pending = filteredStudents.filter(s => attendanceStatus[s.id].status === 'pending').length;
+
+            document.getElementById('receivedCount').textContent = received;
+            document.getElementById('notReceivedCount').textContent = notReceived;
+            document.getElementById('notAttendedCount').textContent = notAttended;
+            document.getElementById('pendingCount').textContent = pending;
+        }
+
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'received': return '<i class="fas fa-utensils"></i>';
+                case 'not-received': return '<i class="fas fa-times"></i>';
+                case 'not-attended': return '<i class="fas fa-user-slash"></i>';
+                case 'pending': return '<i class="fas fa-clock"></i>';
+                default: return '';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'received': return 'Recibió';
+                case 'not-received': return 'No Recibió';
+                case 'not-attended': return 'No Asistió';
+                case 'pending': return 'Pendiente';
+                default: return '';
+            }
+        }
+
+        // Novelty Modal Functions
+        function openNoveltyModal(studentId) {
+            selectedStudentForNovelty = studentId;
+            document.getElementById('noveltyModal').classList.add('show');
+        }
+
+        function openBulkNoveltyModal() {
+            if (filteredStudents.length === 0) {
+                showNotification('No hay estudiantes cargados', 'warning');
+                return;
+            }
+            selectedStudentForNovelty = 'bulk';
+            document.getElementById('noveltyModal').classList.add('show');
+        }
+
+        function closeNoveltyModal() {
+            document.getElementById('noveltyModal').classList.remove('show');
+            document.getElementById('noveltyForm').reset();
+            selectedStudentForNovelty = null;
+        }
+
+        function saveNovelty(e) {
+            e.preventDefault();
+            
+            const noveltyData = {
+                type: document.getElementById('noveltyType').value,
+                description: document.getElementById('noveltyDescription').value,
+                severity: document.getElementById('noveltySeverity').value,
+                followUp: document.getElementById('noveltyFollowUp').value,
+                timestamp: new Date().toISOString()
+            };
+
+            if (selectedStudentForNovelty === 'bulk') {
+                // Apply novelty to all students in current group
+                filteredStudents.forEach(student => {
+                    attendanceStatus[student.id].novelty = noveltyData;
+                });
+                showNotification('Novedad registrada para todos los estudiantes del grupo', 'success');
+            } else {
+                // Apply novelty to specific student
+                attendanceStatus[selectedStudentForNovelty].novelty = noveltyData;
+                const student = filteredStudents.find(s => s.id === selectedStudentForNovelty);
+                showNotification(`Novedad registrada para ${student.name}`, 'success');
+            }
+
+            closeNoveltyModal();
+        }
+
+        // QR Functions
+        function generateStudentQR(studentId) {
+            const student = filteredStudents.find(s => s.id === studentId);
+            if (!student) return;
+
+            // Generate QR data
+            const qrData = QR_GENERATOR_SYSTEM.generateStudentQR({
+                id: student.id,
+                name: student.name,
+                documentNumber: student.documentNumber || '',
+                groupId: student.groupId,
+                grade: student.grade,
+                sede: student.sede
+            });
+
+            // Show student info
+            document.getElementById('qrStudentName').textContent = student.name;
+            document.getElementById('qrStudentGrade').textContent = `${student.grade} - ${student.groupId}`;
+            document.getElementById('qrValidUntil').textContent = `Válido hasta: ${new Date(qrData.validUntil).toLocaleTimeString('es-CO')}`;
+
+            // Generate QR code
+            const qrCodeDiv = document.getElementById('qrCode');
+            qrCodeDiv.innerHTML = '';
+            
+            QRCode.toCanvas(qrCodeDiv, JSON.stringify(qrData), {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function (error) {
+                if (error) {
+                    console.error(error);
+                    showNotification('Error generando código QR', 'error');
+                } else {
+                    document.getElementById('qrModal').classList.add('show');
+                }
+            });
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').classList.remove('show');
+        }
+
+        function generateNewQRCode() {
+            // This would generate a new QR code with updated timestamp
+            const studentName = document.getElementById('qrStudentName').textContent;
+            const student = filteredStudents.find(s => s.name === studentName);
+            if (student) {
+                generateStudentQR(student.id);
+            }
+        }
+
+        function downloadQRCode() {
+            const canvas = document.querySelector('#qrCode canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'qr-code-barroblanco.png';
+                link.href = canvas.toDataURL();
+                link.click();
+                showNotification('Código QR descargado', 'success');
+            }
+        }
+
+        function saveAttendance() {
+            if (filteredStudents.length === 0) {
+                showNotification('No hay estudiantes para guardar', 'warning');
+                return;
+            }
+
+            const attendanceData = {
+                date: new Date().toISOString().split('T')[0],
+                sede: currentSede,
+                group: currentGroup,
+                records: attendanceStatus,
+                totalStudents: filteredStudents.length,
+                timestamp: new Date().toISOString(),
+                sedeInfo: BARROBLANCO_DATA.methods.getSedeById(currentSede),
+                groupInfo: BARROBLANCO_DATA.methods.getGroupById(currentGroup)
+            };
+            
+            localStorage.setItem('barroblanco_attendance', JSON.stringify(attendanceData));
+            showNotification('Registro de asistencia guardado exitosamente', 'success');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : 
+                           type === 'error' ? 'bg-red-500' : 
+                           type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+            notification.className = `fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg ${bgColor} text-white max-w-sm`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 
+                                   type === 'error' ? 'fa-exclamation-circle' : 
+                                   type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} mr-3"></i>
+                    <span class="flex-1">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
