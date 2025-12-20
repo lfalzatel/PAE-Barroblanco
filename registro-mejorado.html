@@ -930,17 +930,20 @@ fetch("js/estudiantes-bachillerato.json")
                                 <div class="flex justify-between items-start">
                                     <h3 class="font-semibold text-gray-800 text-sm ">${student.name}</h3>
                                     <!-- Active Toggle -->
-                                    <label class="inline-flex items-center cursor-pointer ml-2">
-                                        <input type="checkbox" onchange="toggleStudentActive('${student.id}')" class="sr-only peer" ${isActive ? 'checked' : ''}>
-                                        <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
-                                    </label>
+                                    <div class="flex flex-col items-center ml-2">
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" onchange="toggleStudentActive('${student.id}')" class="sr-only peer" ${isActive ? 'checked' : ''}>
+                                            <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                        <span class="text-[10px] text-gray-500 mt-0.5 leading-tight">${isActive ? 'Activo' : 'Inactivo'}</span>
+                                    </div>
                                 </div>
                                 <p class="text-gray-600 text-xs">${student.grade}</p>
                                 <p class="text-gray-500 text-xs">ID: ${student.id}</p>
                                 <span class="status-badge badge-${status} mt-2">
                                     ${getStatusIcon(status)} ${getStatusText(status)}
                                 </span>
-                                ${!isActive ? '<span class="ml-2 text-xs font-bold text-gray-500">(Inactivo)</span>' : ''}
+                                ${!isActive ? '<span class="ml-2 text-xs font-bold text-gray-500"></span>' : ''}
                             </div>
                         </div>
                     </div>
