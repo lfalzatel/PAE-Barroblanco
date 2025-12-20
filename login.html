@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PAE Barroblanco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        
+        .login-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 58, 138, 0.3);
+        }
+        
+        .user-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div class="container max-w-6xl">
+        <div class="login-card rounded-2xl shadow-2xl p-8 md:p-12 fade-in">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-800 to-blue-900 rounded-2xl mb-4">
+                    <i class="fas fa-utensils text-white text-3xl"></i>
+                </div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">Sistema PAE</h1>
+                <p class="text-xl text-gray-600">Barroblanco Institución Educativa</p>
+                <p class="text-sm text-gray-500 mt-2">Programa de Alimentación Escolar</p>
+            </div>
+
+            <!-- Login Form -->
+            <div class="max-w-md mx-auto mb-8">
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-envelope mr-2 text-blue-600"></i>Correo Electrónico
+                        </label>
+                        <input type="text" id="email" name="email" required autocomplete="off"
+                               class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
+                               placeholder="usuario&#64;barroblanco.edu.co">
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lock mr-2 text-blue-600"></i>Contraseña
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" required
+                                   class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none pr-12"
+                                   placeholder="••••••••">
+                            <button type="button" onclick="togglePassword()" 
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                <i id="toggleIcon" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="remember" name="remember" 
+                                   class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <span class="ml-2 text-sm text-gray-600">Recordarme</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" 
+                            class="btn-login w-full py-3 px-4 text-white font-semibold rounded-lg">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
+                    </button>
+
+                    <!-- Error Message -->
+                    <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <span id="errorText"></span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Demo Users -->
+            <div class="border-t border-gray-200 pt-8">
+                <p class="text-center text-sm text-gray-500 mb-6">
+                    <i class="fas fa-info-circle mr-2"></i>Usuarios de demostración (haz click en cualquier tarjeta)
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Admin -->
+                    <div class="user-card bg-blue-50 border-2 border-blue-200 rounded-xl p-4" 
+                         onclick="fillCredentials('admin&#64;barroblanco.edu.co', 'admin123')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user-shield text-white text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-semibold text-gray-900">Administrador</p>
+                                <p class="text-xs text-gray-600">Acceso total</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">admin&#64;barroblanco.edu.co</p>
+                        <p class="text-xs text-gray-400 mt-1">Contraseña: admin123</p>
+                    </div>
+
+                    <!-- Coordinador -->
+                    <div class="user-card bg-green-50 border-2 border-green-200 rounded-xl p-4" 
+                         onclick="fillCredentials('coordinador&#64;barroblanco.edu.co', 'coord123')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-clipboard-list text-white text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-semibold text-gray-900">Coordinador</p>
+                                <p class="text-xs text-gray-600">PAE</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">coordinador&#64;barroblanco.edu.co</p>
+                        <p class="text-xs text-gray-400 mt-1">Contraseña: coord123</p>
+                    </div>
+
+                    <!-- Docente -->
+                    <div class="user-card bg-purple-50 border-2 border-purple-200 rounded-xl p-4" 
+                         onclick="fillCredentials('docente1&#64;barroblanco.edu.co', 'doc123')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-chalkboard-teacher text-white text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-semibold text-gray-900">Docente</p>
+                                <p class="text-xs text-gray-600">Su grupo</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">docente1&#64;barroblanco.edu.co</p>
+                        <p class="text-xs text-gray-400 mt-1">Contraseña: doc123</p>
+                    </div>
+
+                    <!-- Estudiante -->
+                    <div class="user-card bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4" 
+                         onclick="fillCredentials('estudiante&#64;barroblanco.edu.co', 'est123')">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user-graduate text-white text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-semibold text-gray-900">Estudiante</p>
+                                <p class="text-xs text-gray-600">Auto-registro</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">estudiante&#64;barroblanco.edu.co</p>
+                        <p class="text-xs text-gray-400 mt-1">Contraseña: est123</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-8 pt-6 border-t border-gray-200">
+                <p class="text-sm text-gray-500">
+                    <i class="fas fa-map-marker-alt mr-2"></i>Rionegro, Antioquia, Colombia
+                </p>
+                <p class="text-xs text-gray-400 mt-2">&copy; 2024 Barroblanco Institución Educativa</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Fill credentials (for demo users)
+        function fillCredentials(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            document.getElementById('errorMessage').classList.add('hidden');
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                errorDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            console.log('=== INTENTANDO LOGIN ===');
+            console.log('Email ingresado:', email);
+            console.log('AUTH_SYSTEM disponible:', typeof AUTH_SYSTEM !== 'undefined');
+            
+            // Verificar que AUTH_SYSTEM exista
+            if (typeof AUTH_SYSTEM === 'undefined') {
+                alert('ERROR CRÍTICO: Sistema de autenticación no cargado.\n\nVerifica que el archivo js/auth.js existe en la carpeta correcta.');
+                return;
+            }
+            
+            const result = AUTH_SYSTEM.login(email, password);
+            
+            console.log('Resultado del login:', result);
+            
+            if (result.success) {
+                // Guardar preferencia de recordar
+                if (remember) {
+                    localStorage.setItem('pae_remember', 'true');
+                }
+                
+                // Mostrar mensaje de éxito
+                const roleNames = {
+                    'admin': 'Administrador',
+                    'coordinador': 'Coordinador PAE',
+                    'docente': 'Docente',
+                    'estudiante': 'Estudiante'
+                };
+                
+                alert('✅ ¡Login exitoso!\n\nUsuario: ' + result.user.name + '\nRol: ' + roleNames[result.user.role]);
+                
+                // Redirigir según rol
+                if (result.user.role === 'estudiante') {
+                    window.location.href = 'mi-qr.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert('❌ ERROR: ' + result.message + '\n\nVerifica las credenciales:\n\nAdmin:\nadmin@barroblanco.edu.co\nadmin123');
+                showError(result.message);
+            }
+        });
+
+        // Check if already logged in
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof AUTH_SYSTEM !== 'undefined') {
+                const currentUser = AUTH_SYSTEM.getCurrentUser();
+                if (currentUser) {
+                    console.log('Usuario ya logueado:', currentUser.name);
+                    if (currentUser.role === 'estudiante') {
+                        window.location.href = 'mi-qr.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }
+            } else {
+                console.error('AUTH_SYSTEM no está cargado!');
+            }
+        });
+    </script>
+</body>
+</html>

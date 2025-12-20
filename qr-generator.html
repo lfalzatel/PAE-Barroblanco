@@ -3,124 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de CÃ³digos QR - PAE Barroblanco</title>
+    <title>Generador de QR - PAE Barroblanco</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="js/barroblanco-data.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .qr-card {
-            transition: all 0.3s ease;
-            border: 2px dashed #e5e7eb;
-        }
-        
-        .qr-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            border-color: #3b82f6;
-        }
-        
-        .qr-card.generated {
-            border-style: solid;
-            border-color: #10b981;
-        }
-        
-        .print-preview {
-            page-break-inside: avoid;
-            margin-bottom: 20px;
-        }
-        
+        * { font-family: 'Inter', sans-serif; }
+        .qr-card { transition: all 0.3s ease; }
+        .qr-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            
-            body {
-                background: white !important;
-            }
-            
-            .qr-card {
-                border: none !important;
-                box-shadow: none !important;
-            }
-        }
-        
-        .search-input {
-            transition: all 0.3s ease;
-        }
-        
-        .search-input:focus {
-            transform: scale(1.02);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        .sede-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-        
-        .sede-principal {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .sede-primaria {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        
-        .sede-maria {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-        /* Mobile Menu */
-        .mobile-menu {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .mobile-menu.show {
-            transform: translateX(0);
-        }
-        
-        .mobile-nav-item {
-            padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            display: block;
-            text-decoration: none;
-            color: #374151;
-            font-weight: 500;
-        }
-        
-        .mobile-nav-item:hover {
-            background-color: #f3f4f6;
-            color: #1e3a8a;
-        }
-        
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            .mobile-nav-button {
-                display: block;
-            }
-        }
-        
-        @media (min-width: 769px) {
-            .mobile-nav-button {
-                display: none;
-            }
+            .no-print { display: none; }
+            .qr-card { page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -128,17 +23,17 @@
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Logo y Nombre -->
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-qrcode text-blue-800 text-2xl mr-3"></i>
-                        <span class="text-xl font-bold text-gray-800">Barroblanco PAE</span>
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-utensils text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">PAE Barroblanco</h1>
+                        <p class="text-xs text-gray-500">Generador de QR</p>
                     </div>
                 </div>
-                
-                <!-- Desktop Navigation -->
-                <div class="desktop-nav flex items-center space-x-6">
+                <div class="flex items-center space-x-6">
                     <a href="index.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-home mr-2"></i>Inicio</a>
                     <a href="registro-mejorado.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
@@ -149,8 +44,9 @@
                         <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
                     <a href="estudiantes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-users mr-2"></i>Estudiantes</a>
+                    <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Salir</button>
                 </div>
-                
                 <!-- Mobile Navigation Button -->
                 <div class="mobile-nav-button flex items-center">
                     <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-800 p-2">
@@ -159,15 +55,14 @@
                 </div>
             </div>
         </div>
-        
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40">
+        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 ">
             <div class="py-4">
                 <a href="index.html" class="mobile-nav-item">
                     <i class="fas fa-home mr-3"></i>Inicio</a>
                 <a href="registro-mejorado.html" class="mobile-nav-item">
                     <i class="fas fa-clipboard-check mr-3"></i>Registro</a>
-                <a href="qr-generator.html" class="mobile-nav-item active text-blue-800">
+                <a href="qr-generator.html" class="mobile-nav-item text-blue-800">
                     <i class="fas fa-qrcode mr-3"></i>Códigos QR</a>
                 <a href="reportes-barroblanco.html" class="mobile-nav-item">
                     <i class="fas fa-chart-bar mr-3"></i>Reportes</a>
@@ -176,53 +71,40 @@
             </div>
         </div>
     </nav>
-    <!-- Header -->
-    <section class="pt-20 pb-8 bg-gradient-to-r from-blue-50 to-indigo-50 no-print">
+
+    <!-- Main Content -->
+    <section class="pt-20 pb-8 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="text-center md:text-left mb-4 md:mb-0">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Generador de Códigos QR</h1>
-                    <p class="text-xl text-gray-600">Genera códigos QR para el auto-registro de estudiantes del PAE Barroblanco</p>
-                </div>
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-4xl font-bold text-gray-900">Generador de Códigos QR</h1>
                 <div class="flex space-x-4">
-                    <button onclick="generateAllQRCodes()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <button onclick="generateAllQR()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
                         <i class="fas fa-magic mr-2"></i>Generar Todos
                     </button>
-                    <button onclick="printAllQRCodes()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                        <i class="fas fa-print mr-2"></i>Imprimir Todos
+                    <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg">
+                        <i class="fas fa-print mr-2"></i>Imprimir
                     </button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Filters -->
-    <section class="py-6 no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                    <div class="flex-1 max-w-md">
-                        <div class="relative">
-                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            <input type="text" id="searchInput" placeholder="Buscar estudiante por nombre o documento..." 
-                                   class="search-input w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-                        </div>
-                    </div>
-                    <div class="flex space-x-4">
-                        <select id="sedeFilter" class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+            <!-- Filters -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Sede</label>
+                        <select id="sedeFilter" onchange="filterQR()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                             <option value="">Todas las sedes</option>
-                            <option value="principal">Sede Principal</option>
-                            <option value="primaria">Sede Primaria</option>
-                            <option value="maria">Sede MarÃ­a Inmaculada</option>
                         </select>
-                        <select id="gradeFilter" class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Grupo</label>
+                        <select id="groupFilter" onchange="filterQR()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                             <option value="">Todos los grupos</option>
                         </select>
-                        <select id="statusFilter" class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-                            <option value="">Todos los estados</option>
-                            <option value="active">Activos</option>
-                            <option value="inactive">Inactivos</option>
-                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
+                        <input type="text" id="searchInput" onkeyup="filterQR()" placeholder="Nombre o matrícula..." class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                 </div>
             </div>
@@ -238,313 +120,105 @@
         </div>
     </section>
 
-    <!-- Loading Modal -->
-    <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible transition-all">
-        <div class="bg-white rounded-xl p-8 text-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p class="text-gray-700 font-medium">Generando cÃ³digos QR...</p>
-            <p class="text-sm text-gray-500 mt-2" id="loadingProgress">0 de 0 estudiantes procesados</p>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-16 no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400">&copy; 2024 PAE Barroblanco - Programa de AlimentaciÃ³n Escolar. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/barroblanco-data.js"></script>
     <script>
-        // Sample students data - In production, this would come from the main students database
-        const students = [
-            { 
-                id: 'EST001', 
-                name: 'Valentina Jurado Henao',
-                documentNumber: '1036250081',
-                grade: '1101',
-                sede: 'principal',
-                status: 'active'
-            },
-            { 
-                id: 'EST002', 
-                name: 'Carlos AndrÃ©s RodrÃ­guez LÃ³pez',
-                documentNumber: '1036250082',
-                grade: '1101',
-                sede: 'principal',
-                status: 'active'
-            },
-            { 
-                id: 'EST003', 
-                name: 'Ana SofÃ­a MartÃ­nez GarcÃ­a',
-                documentNumber: '1036250083',
-                grade: '604',
-                sede: 'principal',
-                status: 'active'
-            },
-            { 
-                id: 'EST004', 
-                name: 'Juan David GÃ³mez PÃ©rez',
-                documentNumber: '1036250084',
-                grade: '701',
-                sede: 'primaria',
-                status: 'active'
-            },
-            { 
-                id: 'EST005', 
-                name: 'MarÃ­a JosÃ© HernÃ¡ndez DÃ­az',
-                documentNumber: '1036250085',
-                grade: '704',
-                sede: 'primaria',
-                status: 'active'
-            },
-            { 
-                id: 'EST006', 
-                name: 'Daniel Felipe Torres RamÃ­rez',
-                documentNumber: '1036250086',
-                grade: '401',
-                sede: 'maria',
-                status: 'active'
-            }
-        ];
+        AUTH_SYSTEM.init();
+        AUTH_SYSTEM.checkSession();
 
-        let filteredStudents = [...students];
-        let generatedQRCodes = new Set();
+        let allStudents = [];
+        let filteredStudents = [];
 
-        document.addEventListener('DOMContentLoaded', function() {
-            renderQRCards();
-            populateFilters();
-            
-            // Add event listeners
-            document.getElementById('searchInput').addEventListener('input', filterStudents);
-            document.getElementById('sedeFilter').addEventListener('change', filterStudents);
-            document.getElementById('gradeFilter').addEventListener('change', filterStudents);
-            document.getElementById('statusFilter').addEventListener('change', filterStudents);
+        document.addEventListener('DOMContentLoaded', async function() {
+            await cargarDatosPAE();
+            allStudents = BARROBLANCO_DATA.students;
+            filteredStudents = allStudents;
+            loadFilters();
+            displayQRCards();
         });
 
-        function populateFilters() {
-            const gradeFilter = document.getElementById('gradeFilter');
-            const allGroups = BARROBLANCO_DATA.methods.getAllGroups();
+        function loadFilters() {
+            const sedeFilter = document.getElementById('sedeFilter');
+            const sedes = BARROBLANCO_DATA.methods.getAllSedes();
             
-            allGroups.forEach(group => {
+            sedes.forEach(sede => {
                 const option = document.createElement('option');
-                option.value = group.id;
-                option.textContent = `${group.id} - ${group.name}`;
-                gradeFilter.appendChild(option);
+                option.value = sede.id;
+                option.textContent = sede.name;
+                sedeFilter.appendChild(option);
             });
         }
 
-        function filterStudents() {
+        function filterQR() {
+            const sedeId = document.getElementById('sedeFilter').value;
+            const groupId = document.getElementById('groupFilter').value;
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const sedeFilter = document.getElementById('sedeFilter').value;
-            const gradeFilter = document.getElementById('gradeFilter').value;
-            const statusFilter = document.getElementById('statusFilter').value;
 
-            filteredStudents = students.filter(student => {
-                const matchesSearch = student.name.toLowerCase().includes(searchTerm) || 
-                                    student.documentNumber.toLowerCase().includes(searchTerm) ||
-                                    student.id.toLowerCase().includes(searchTerm);
-                const matchesSede = !sedeFilter || student.sede === sedeFilter;
-                const matchesGrade = !gradeFilter || student.grade === gradeFilter;
-                const matchesStatus = !statusFilter || student.status === statusFilter;
-
-                return matchesSearch && matchesSede && matchesGrade && matchesStatus;
+            filteredStudents = allStudents.filter(student => {
+                const matchSede = !sedeId || student.sede === sedeId;
+                const matchGroup = !groupId || student.groupId === groupId;
+                const matchSearch = !searchTerm || student.name.toLowerCase().includes(searchTerm) || student.matricula.includes(searchTerm);
+                return matchSede && matchGroup && matchSearch;
             });
 
-            renderQRCards();
+            displayQRCards();
         }
 
-        function renderQRCards() {
+        function displayQRCards() {
             const container = document.getElementById('qrCardsContainer');
             container.innerHTML = '';
 
-            filteredStudents.forEach((student, index) => {
+            if (filteredStudents.length === 0) {
+                container.innerHTML = '<p class="col-span-full text-center text-gray-500 py-8">No se encontraron estudiantes</p>';
+                return;
+            }
+
+            filteredStudents.forEach(student => {
                 const card = document.createElement('div');
-                const sedeInfo = BARROBLANCO_DATA.sedes[student.sede];
-                const groupInfo = BARROBLANCO_DATA.methods.getGroupById(student.grade);
-                const isSordos = groupInfo && groupInfo.type === 'sordos';
-                
-                card.className = 'qr-card bg-white rounded-xl p-6 text-center print-preview';
+                card.className = 'qr-card bg-white rounded-xl shadow-lg p-6 text-center';
                 card.innerHTML = `
-                    <div class="mb-4">
-                        <div class="w-32 h-32 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center" id="qr-${student.id}">
-                            <i class="fas fa-qrcode text-gray-400 text-4xl"></i>
-                        </div>
-                        <div class="text-sm text-gray-500 mb-2">${student.id}</div>
-                        <h3 class="font-bold text-gray-900 mb-1 text-sm leading-tight">${student.name}</h3>
-                        <div class="text-xs text-gray-600 mb-2">${student.documentNumber}</div>
-                        <div class="flex items-center justify-center mb-2">
-                            <span class="text-xs font-medium text-blue-600">${student.grade}</span>
-                            ${isSordos ? '<i class="fas fa-hands text-yellow-600 ml-2 text-xs" title="Grupo Sordos"></i>' : ''}
-                        </div>
-                        <div class="text-xs text-gray-500 mb-2">${sedeInfo ? sedeInfo.name : 'Sin sede'}</div>
-                        <span class="sede-badge sede-${student.sede}">${student.sede}</span>
-                    </div>
-                    <div class="flex space-x-2 justify-center no-print">
-                        <button onclick="generateQRCode('${student.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs transition-colors">
-                            <i class="fas fa-magic mr-1"></i>Generar
-                        </button>
-                        <button onclick="printQRCode('${student.id}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs transition-colors">
-                            <i class="fas fa-print mr-1"></i>Imprimir
-                        </button>
-                    </div>
-                    <div class="text-xs text-gray-400 mt-2 no-print">
-                        Escanea para registrar asistencia
-                    </div>
+                    <img src="${student.imageUrl}" alt="${student.name}" class="w-20 h-20 rounded-full mx-auto mb-4">
+                    <h3 class="font-semibold text-gray-900 mb-1">${student.name}</h3>
+                    <p class="text-sm text-gray-500 mb-4">Matrícula: ${student.matricula}</p>
+                    <div id="qr-${student.id}" class="flex justify-center mb-4"></div>
+                    <p class="text-xs text-gray-400">${student.grade} - ${student.groupId}</p>
                 `;
                 container.appendChild(card);
             });
-
-            // Animate cards
-            anime({
-                targets: '.qr-card',
-                translateY: [20, 0],
-                opacity: [0, 1],
-                delay: anime.stagger(50),
-                duration: 600,
-                easing: 'easeOutQuart'
-            });
         }
 
-        function generateQRCode(studentId) {
-            const student = students.find(s => s.id === studentId);
-            if (!student) return;
+        function generateAllQR() {
+            filteredStudents.forEach(student => {
+                generateStudentQR(student);
+            });
+            alert(`${filteredStudents.length} códigos QR generados`);
+        }
 
-            const qrContainer = document.getElementById(`qr-${studentId}`);
-            const card = qrContainer.closest('.qr-card');
-            
-            // Clear existing content
+        function generateStudentQR(student) {
+            const qrContainer = document.getElementById(`qr-${student.id}`);
+            if (!qrContainer) return;
+
             qrContainer.innerHTML = '';
-            
-            // Generate QR code
-            const qrData = {
-                studentId: student.id,
-                name: student.name,
-                document: student.documentNumber,
-                grade: student.grade,
-                sede: student.sede,
-                timestamp: new Date().toISOString()
-            };
 
-            QRCode.toCanvas(qrData.studentId, function (error, canvas) {
+            const qrData = QR_GENERATOR_SYSTEM.generateStudentQR(student);
+
+            QRCode.toCanvas(JSON.stringify(qrData), {
+                width: 150,
+                margin: 1
+            }, function (error, canvas) {
                 if (!error) {
-                    canvas.style.width = '128px';
-                    canvas.style.height = '128px';
                     qrContainer.appendChild(canvas);
-                    card.classList.add('generated');
-                    generatedQRCodes.add(studentId);
                 } else {
-                    console.error('Error generating QR code:', error);
-                    qrContainer.innerHTML = '<i class="fas fa-exclamation-triangle text-red-400 text-4xl"></i>';
+                    console.error('Error generating QR:', error);
                 }
             });
         }
-
-        function generateAllQRCodes() {
-            if (filteredStudents.length === 0) {
-                showNotification('No hay estudiantes para generar cÃ³digos QR', 'warning');
-                return;
-            }
-
-            showLoadingModal(true, filteredStudents.length);
-            
-            let processed = 0;
-            const batchSize = 5; // Process in batches to avoid blocking UI
-            
-            function processBatch() {
-                const batch = filteredStudents.slice(processed, processed + batchSize);
-                
-                batch.forEach(student => {
-                    if (!generatedQRCodes.has(student.id)) {
-                        generateQRCode(student.id);
-                    }
-                });
-                
-                processed += batch.length;
-                updateLoadingProgress(processed, filteredStudents.length);
-                
-                if (processed < filteredStudents.length) {
-                    setTimeout(processBatch, 100); // Small delay between batches
-                } else {
-                    setTimeout(() => {
-                        showLoadingModal(false);
-                        showNotification(`Se generaron ${filteredStudents.length} cÃ³digos QR exitosamente`, 'success');
-                    }, 500);
-                }
-            }
-            
-            processBatch();
-        }
-
-        function printQRCode(studentId) {
-            const student = students.find(s => s.id === studentId);
-            if (!student) return;
-
-            // Generate QR if not already generated
-            if (!generatedQRCodes.has(studentId)) {
-                generateQRCode(studentId);
-                setTimeout(() => {
-                    window.print();
-                }, 500);
-            } else {
-                window.print();
-            }
-        }
-
-        function printAllQRCodes() {
-            if (filteredStudents.length === 0) {
-                showNotification('No hay estudiantes para imprimir', 'warning');
-                return;
-            }
-
-            // Generate all QR codes first
-            generateAllQRCodes();
-            
-            // Wait for generation to complete, then print
-            setTimeout(() => {
-                window.print();
-            }, 3000); // Adjust timing based on number of students
-        }
-
-        function showLoadingModal(show, total = 0) {
-            const modal = document.getElementById('loadingModal');
-            const progress = document.getElementById('loadingProgress');
-            
-            if (show) {
-                modal.classList.remove('opacity-0', 'invisible');
-                modal.classList.add('opacity-100', 'visible');
-                progress.textContent = `0 de ${total} estudiantes procesados`;
-            } else {
-                modal.classList.add('opacity-0', 'invisible');
-                modal.classList.remove('opacity-100', 'visible');
-            }
-        }
-
-        function updateLoadingProgress(processed, total) {
-            const progress = document.getElementById('loadingProgress');
-            progress.textContent = `${processed} de ${total} estudiantes procesados`;
-        }
-
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
-            notification.className = `fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg ${bgColor} text-white max-w-sm no-print`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} mr-3"></i>
-                    <span class="flex-1">${message}</span>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
+        // Mobile menu functionality
+            window.toggleMobileMenu = function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('show');
+            };
     </script>
-    
 </body>
 </html>
