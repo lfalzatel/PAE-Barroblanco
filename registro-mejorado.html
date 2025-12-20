@@ -893,7 +893,8 @@ fetch("js/estudiantes-bachillerato.json")
                 attendanceStatus[student.id] = {
                     status: 'pending',
                     novelty: null,
-                    timestamp: null
+                    timestamp: null,
+                    active: true // Default to active
                 };
             });
 
@@ -909,9 +910,13 @@ fetch("js/estudiantes-bachillerato.json")
             grid.innerHTML = '';
 
             filteredStudents.forEach(student => {
-                const status = attendanceStatus[student.id].status;
+                const statusData = attendanceStatus[student.id];
+                const status = statusData.status;
+                const isActive = statusData.active !== false; // Default true
+
                 const card = document.createElement('div');
-                card.className = `student-card status-${status} bg-white rounded-xl shadow-lg p-4`;
+                // Add opacity if inactive
+                card.className = `student-card status-${status} bg-white rounded-xl shadow-lg p-4 ${!isActive ? 'opacity-60 grayscale' : ''}`;
 
                 const isSordos = student.type === 'sordos';
                 const sordosBadge = isSordos ? '<div class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Sordos</div>' : '';
@@ -920,23 +925,28 @@ fetch("js/estudiantes-bachillerato.json")
                     <div class="relative">
                         ${sordosBadge}
                         <div class="flex items-center space-x-4 mb-4">
-                            <!-- <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-blue-800 text-xl"></i>
-                            </div> -->
                             <img src="${obtenerImagenEstudiante(student)}" alt="${student.name}" class="w-16 h-16 rounded-full object-cover">
                             <div class="flex-1 min-w-0">
-                                <h3 class="font-semibold text-gray-800 text-sm ">${student.name}</h3>
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-semibold text-gray-800 text-sm ">${student.name}</h3>
+                                    <!-- Active Toggle -->
+                                    <label class="inline-flex items-center cursor-pointer ml-2">
+                                        <input type="checkbox" onchange="toggleStudentActive('${student.id}')" class="sr-only peer" ${isActive ? 'checked' : ''}>
+                                        <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
                                 <p class="text-gray-600 text-xs">${student.grade}</p>
                                 <p class="text-gray-500 text-xs">ID: ${student.id}</p>
                                 <span class="status-badge badge-${status} mt-2">
                                     ${getStatusIcon(status)} ${getStatusText(status)}
                                 </span>
+                                ${!isActive ? '<span class="ml-2 text-xs font-bold text-gray-500">(Inactivo)</span>' : ''}
                             </div>
                         </div>
                     </div>
                     
                     <!-- Attendance Options -->
-                    <div class="grid grid-cols-3 gap-2 mb-4">
+                    <div class="grid grid-cols-3 gap-2 mb-4 ${!isActive ? 'pointer-events-none' : ''}">
                         <button onclick="markAttendance('${student.id}', 'received')" 
                                 class="attendance-option ${status === 'received' ? 'selected bg-green-500 text-white' : 'bg-green-100 text-green-600'} p-2 rounded-lg text-xs font-medium transition-all">
                             <i class="fas fa-utensils block mb-1"></i>
@@ -955,7 +965,7 @@ fetch("js/estudiantes-bachillerato.json")
                     </div>
                     
                     <!-- Action Buttons -->
-                    <div class="flex space-x-2">
+                    <div class="flex space-x-2 ${!isActive ? 'pointer-events-none' : ''}">
                         <button onclick="openNoveltyModal('${student.id}')" 
                                 class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-3 rounded-lg text-xs transition-colors">
                             <i class="fas fa-exclamation-triangle mr-1"></i>Novedad
@@ -980,6 +990,15 @@ fetch("js/estudiantes-bachillerato.json")
             });
         }
 
+        function toggleStudentActive(studentId) {
+            if (attendanceStatus[studentId]) {
+                attendanceStatus[studentId].active = !attendanceStatus[studentId].active;
+                renderStudentsGrid();
+                updateProgress();
+                updateCounts();
+            }
+        }
+
         function markAttendance(studentId, status) {
             attendanceStatus[studentId] = {
                 status: status,
@@ -1001,10 +1020,11 @@ fetch("js/estudiantes-bachillerato.json")
             }
 
             filteredStudents.forEach(student => {
-                attendanceStatus[student.id] = {
-                    status: status,
-                    timestamp: new Date().toISOString()
-                };
+                // Only mark active students
+                if (attendanceStatus[student.id].active !== false) {
+                    attendanceStatus[student.id].status = status;
+                    attendanceStatus[student.id].timestamp = new Date().toISOString();
+                }
             });
 
             renderStudentsGrid();
@@ -1015,8 +1035,10 @@ fetch("js/estudiantes-bachillerato.json")
         }
 
         function updateProgress() {
-            const total = filteredStudents.length;
-            const completed = filteredStudents.filter(student => attendanceStatus[student.id].status !== 'pending').length;
+            // Filter active students
+            const activeStudents = filteredStudents.filter(s => attendanceStatus[s.id].active !== false);
+            const total = activeStudents.length;
+            const completed = activeStudents.filter(student => attendanceStatus[student.id].status !== 'pending').length;
             const percentage = total > 0 ? (completed / total) * 100 : 0;
 
             document.getElementById('progressBar').style.width = `${percentage}%`;
@@ -1024,10 +1046,13 @@ fetch("js/estudiantes-bachillerato.json")
         }
 
         function updateCounts() {
-            const received = filteredStudents.filter(s => attendanceStatus[s.id].status === 'received').length;
-            const notReceived = filteredStudents.filter(s => attendanceStatus[s.id].status === 'not-received').length;
-            const notAttended = filteredStudents.filter(s => attendanceStatus[s.id].status === 'not-attended').length;
-            const pending = filteredStudents.filter(s => attendanceStatus[s.id].status === 'pending').length;
+            // Filter active students for counts
+            const activeStudents = filteredStudents.filter(s => attendanceStatus[s.id].active !== false);
+
+            const received = activeStudents.filter(s => attendanceStatus[s.id].status === 'received').length;
+            const notReceived = activeStudents.filter(s => attendanceStatus[s.id].status === 'not-received').length;
+            const notAttended = activeStudents.filter(s => attendanceStatus[s.id].status === 'not-attended').length;
+            const pending = activeStudents.filter(s => attendanceStatus[s.id].status === 'pending').length;
 
             document.getElementById('receivedCount').textContent = received;
             document.getElementById('notReceivedCount').textContent = notReceived;
@@ -1174,12 +1199,22 @@ fetch("js/estudiantes-bachillerato.json")
                 return;
             }
 
+            // Check for pending active students
+            const activeStudents = filteredStudents.filter(s => attendanceStatus[s.id].active !== false);
+            const pendingCount = activeStudents.filter(s => attendanceStatus[s.id].status === 'pending').length;
+
+            if (pendingCount > 0) {
+                showNotification(`No se puede guardar. Hay ${pendingCount} estudiantes pendientes.`, 'error');
+                // Scroll to first pending student or top
+                return;
+            }
+
             const attendanceData = {
                 date: new Date().toISOString().split('T')[0],
                 sede: currentSede,
                 group: currentGroup,
                 records: attendanceStatus,
-                totalStudents: filteredStudents.length,
+                totalStudents: activeStudents.length, // Save count of active students
                 timestamp: new Date().toISOString(),
                 sedeInfo: BARROBLANCO_DATA.methods.getSedeById(currentSede),
                 groupInfo: BARROBLANCO_DATA.methods.getGroupById(currentGroup)
@@ -1187,6 +1222,15 @@ fetch("js/estudiantes-bachillerato.json")
 
             localStorage.setItem('barroblanco_attendance', JSON.stringify(attendanceData));
             showNotification('Registro de asistencia guardado exitosamente', 'success');
+
+            // Redirect/Scroll to progress section
+            const progressSection = document.querySelector('.bg-white.rounded-xl.shadow-lg.p-6.mb-8'); // Progress bar container
+            if (progressSection) {
+                progressSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Add a highlight effect
+                progressSection.classList.add('ring-4', 'ring-green-400');
+                setTimeout(() => progressSection.classList.remove('ring-4', 'ring-green-400'), 2000);
+            }
         }
 
         function showNotification(message, type) {
