@@ -1,61 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - PAE Barroblanco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         .stat-card {
             transition: all 0.3s ease;
         }
-        
+
         .stat-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .gradient-text {
             background: linear-gradient(135deg, #22c55e, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .mobile-menu {
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
-        
+
         .mobile-menu.show {
             transform: translateX(0);
         }
-        
+
         @media (max-width: 768px) {
-            .desktop-nav { display: none; }
-            .mobile-nav-button { display: block; }
+            .desktop-nav {
+                display: none;
+            }
+
+            .mobile-nav-button {
+                display: block;
+            }
         }
-        
+
         @media (min-width: 769px) {
-            .mobile-nav-button { display: none; }
+            .mobile-nav-button {
+                display: none;
+            }
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
                         <i class="fas fa-utensils text-white text-lg"></i>
                     </div>
                     <div>
@@ -63,26 +74,30 @@
                         <p class="text-xs text-gray-500">Dashboard</p>
                     </div>
                 </div>
-                
+
                 <!-- Desktop Navigation -->
                 <div class="desktop-nav flex items-center space-x-6">
                     <a href="index.html" class="text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2">
                         <i class="fas fa-home mr-2"></i>Inicio
                     </a>
-                    <a href="registro-mejorado.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
+                    <a href="registro-mejorado.html"
+                        class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
                         <i class="fas fa-clipboard-check mr-2"></i>Registro
                     </a>
                     <a href="qr-generator.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
                         <i class="fas fa-qrcode mr-2"></i>Códigos QR
                     </a>
-                    <a href="reportes-barroblanco.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
+                    <a href="reportes-barroblanco.html"
+                        class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
                         <i class="fas fa-chart-bar mr-2"></i>Reportes
                     </a>
-                    <a href="estudiantes-barroblanco.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
+                    <a href="estudiantes-barroblanco.html"
+                        class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
                         <i class="fas fa-users mr-2"></i>Estudiantes
                     </a>
                     <div class="relative">
-                        <button onclick="toggleUserMenu()" class="flex items-center space-x-2 text-gray-700 hover:text-blue-800">
+                        <button onclick="toggleUserMenu()"
+                            class="flex items-center space-x-2 text-gray-700 hover:text-blue-800">
                             <img id="userAvatar" src="" alt="User" class="w-8 h-8 rounded-full">
                             <span id="userName" class="font-medium"></span>
                             <i class="fas fa-chevron-down text-xs"></i>
@@ -92,13 +107,14 @@
                                 <p class="text-sm font-semibold text-gray-900" id="userNameFull"></p>
                                 <p class="text-xs text-gray-500" id="userRole"></p>
                             </div>
-                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                            <button onclick="logout()"
+                                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
                             </button>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Mobile Navigation Button -->
                 <div class="mobile-nav-button">
                     <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-800 p-2">
@@ -107,7 +123,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Mobile Menu -->
         <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40">
             <div class="py-4">
@@ -146,46 +162,48 @@
                         Sistema de <span class="gradient-text">Asistencia</span> PAE
                     </h1>
                     <p class="text-xl text-gray-600 leading-relaxed">
-                        Gestión integral del Programa de Alimentación Escolar en Barroblanco Institución. 
+                        Gestión integral del Programa de Alimentación Escolar en Barroblanco Institución.
                         Control de asistencia, registro de novedades y reportes detallados para las tres sedes.
                     </p>
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <button onclick="window.location.href='registro-mejorado.html'" class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-all">
+                        <button onclick="window.location.href='registro-mejorado.html'"
+                            class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-all">
                             <i class="fas fa-clipboard-list mr-2"></i>Registrar Asistencia
                         </button>
-                        <button onclick="window.location.href='qr-generator.html'" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition-all">
+                        <button onclick="window.location.href='qr-generator.html'"
+                            class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition-all">
                             <i class="fas fa-qrcode mr-2"></i>Generar QR
                         </button>
                     </div>
                 </div>
-                <div class="relative rounded-2xl shadow-2xl overflow-hidden h-auto" 
+                <div class="relative rounded-2xl shadow-2xl overflow-hidden h-auto"
                     style="background-image: url('resources/hero-cafeteria.jpg'); background-size: cover; background-position: center;">
-    
-                <!-- Overlay semi-transparente -->
-                <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-    
-                <!-- Contenido -->
-                <div class="relative z-10 p-10">
-                    <h3 class="text-2xl font-bold text-white mb-4">Estadísticas de Hoy</h3>
-                    <div class="space-y-2 bg-white bg-opacity-80 rounded-xl p-6">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Total Estudiantes</span>
-                            <span class="text-2xl font-bold text-blue-800" id="totalStudents">-</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Recibieron Alimento</span>
-                            <span class="text-2xl font-bold text-green-600" id="presentToday">-</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Ausentes</span>
-                            <span class="text-2xl font-bold text-red-600" id="absentToday">-</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Tasa de Asistencia</span>
-                            <span class="text-2xl font-bold text-purple-600" id="attendanceRate">-</span>
+
+                    <!-- Overlay semi-transparente -->
+                    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+
+                    <!-- Contenido -->
+                    <div class="relative z-10 p-10">
+                        <h3 class="text-2xl font-bold text-white mb-4">Estadísticas de Hoy</h3>
+                        <div class="space-y-2 bg-white bg-opacity-80 rounded-xl p-6">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Total Estudiantes</span>
+                                <span class="text-2xl font-bold text-blue-800" id="totalStudents">-</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Recibieron Alimento</span>
+                                <span class="text-2xl font-bold text-green-600" id="presentToday">-</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Ausentes</span>
+                                <span class="text-2xl font-bold text-red-600" id="absentToday">-</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Tasa de Asistencia</span>
+                                <span class="text-2xl font-bold text-purple-600" id="attendanceRate">-</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -247,7 +265,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </section>
     <!-- Dashboard Stats -->
@@ -323,28 +341,32 @@
             <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
                 <h3 class="text-xl font-semibold text-gray-800 mb-6">Acciones Rápidas</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <button onclick="window.location.href='registro-mejorado.html'" class="flex items-center justify-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='registro-mejorado.html'"
+                        class="flex items-center justify-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
                         <i class="fas fa-clipboard-list text-blue-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Registrar Asistencia</div>
                             <div class="text-sm text-gray-600">Por grupo y sede</div>
                         </div>
                     </button>
-                    <button onclick="window.location.href='qr-generator.html'" class="flex items-center justify-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='qr-generator.html'"
+                        class="flex items-center justify-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
                         <i class="fas fa-qrcode text-green-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Auto-registro QR</div>
                             <div class="text-sm text-gray-600">Para estudiantes</div>
                         </div>
                     </button>
-                    <button onclick="window.location.href='reportes-barroblanco.html'" class="flex items-center justify-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='reportes-barroblanco.html'"
+                        class="flex items-center justify-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
                         <i class="fas fa-chart-bar text-purple-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Ver Reportes</div>
                             <div class="text-sm text-gray-600">Estadísticas y datos</div>
                         </div>
                     </button>
-                    <button onclick="window.location.href='estudiantes-barroblanco.html'" class="flex items-center justify-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='estudiantes-barroblanco.html'"
+                        class="flex items-center justify-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
                         <i class="fas fa-users text-yellow-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Gestionar Estudiantes</div>
@@ -353,13 +375,14 @@
                     </button>
                 </div>
             </div>
-    </div>
+        </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar.</p>
+            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar.
+            </p>
             <p class="text-gray-500 text-sm mt-2">Rionegro, Antioquia, Colombia</p>
         </div>
     </footer>
@@ -419,7 +442,7 @@
         async function loadStatistics() {
             try {
                 await cargarDatosPAE();
-                
+
                 const totalStudents = BARROBLANCO_DATA.students.length;
                 const presentToday = Math.floor(totalStudents * 0.93);
                 const absentToday = totalStudents - presentToday;
@@ -434,13 +457,18 @@
             }
         }
 
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('show');
+        }
+
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadUserInfo();
             loadStatistics();
         });
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Animate stats on load
             anime({
                 targets: '.card-hover',
@@ -540,13 +568,14 @@
         }, 10000);
 
         // Close user menu when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             const userMenu = document.getElementById('userMenu');
             if (!event.target.closest('.relative') && !userMenu.classList.contains('hidden')) {
                 userMenu.classList.add('hidden');
             }
         });
-        
+
     </script>
 </body>
+
 </html>
