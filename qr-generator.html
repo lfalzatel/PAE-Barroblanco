@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,33 +11,64 @@
     <script src="js/barroblanco-data.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Inter', sans-serif; }
-        .qr-card { transition: all 0.3s ease; }
-        .qr-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
-        
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .qr-card {
+            transition: all 0.3s ease;
+        }
+
+        .qr-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
         /* Mobile Menu Styles */
         .mobile-menu {
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
-        
+
         .mobile-menu.show {
             transform: translateX(0);
         }
 
+        .mobile-nav-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: block;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .mobile-nav-item:hover {
+            background-color: #f3f4f6;
+            color: #1e3a8a;
+        }
+
         @media print {
-            .no-print { display: none; }
-            .qr-card { page-break-inside: avoid; }
+            .no-print {
+                display: none;
+            }
+
+            .qr-card {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
                         <i class="fas fa-utensils text-white text-lg"></i>
                     </div>
                     <div>
@@ -45,15 +77,20 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-6">
-                    <a href="index.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="index.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-home mr-2"></i>Inicio</a>
-                    <a href="registro-mejorado.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="registro-mejorado.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-clipboard-check mr-2"></i>Registro</a>
-                    <a href="qr-generator.html" class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
+                    <a href="qr-generator.html"
+                        class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
                         <i class="fas fa-qrcode mr-2"></i>Códigos QR</a>
-                    <a href="reportes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="reportes-barroblanco.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
-                    <a href="estudiantes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="estudiantes-barroblanco.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-users mr-2"></i>Estudiantes</a>
                     <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
                         <i class="fas fa-sign-out-alt mr-2"></i>Salir</button>
@@ -89,10 +126,12 @@
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-4xl font-bold text-gray-900">Generador de Códigos QR</h1>
                 <div class="flex space-x-4">
-                    <button onclick="generateAllQR()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+                    <button onclick="generateAllQR()"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
                         <i class="fas fa-magic mr-2"></i>Generar Todos
                     </button>
-                    <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg">
+                    <button onclick="window.print()"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg">
                         <i class="fas fa-print mr-2"></i>Imprimir
                     </button>
                 </div>
@@ -103,19 +142,22 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Sede</label>
-                        <select id="sedeFilter" onchange="filterQR()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <select id="sedeFilter" onchange="filterQR()"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                             <option value="">Todas las sedes</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Grupo</label>
-                        <select id="groupFilter" onchange="filterQR()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <select id="groupFilter" onchange="filterQR()"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                             <option value="">Todos los grupos</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
-                        <input type="text" id="searchInput" onkeyup="filterQR()" placeholder="Nombre o matrícula..." class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <input type="text" id="searchInput" onkeyup="filterQR()" placeholder="Nombre o matrícula..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                 </div>
             </div>
@@ -141,7 +183,7 @@
         let allStudents = [];
         let filteredStudents = [];
 
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', async function () {
             await cargarDatosPAE();
             allStudents = BARROBLANCO_DATA.students;
             filteredStudents = allStudents;
@@ -152,7 +194,7 @@
         function loadFilters() {
             const sedeFilter = document.getElementById('sedeFilter');
             const sedes = BARROBLANCO_DATA.methods.getAllSedes();
-            
+
             sedes.forEach(sede => {
                 const option = document.createElement('option');
                 option.value = sede.id;
@@ -226,10 +268,11 @@
             });
         }
         // Mobile menu functionality
-            window.toggleMobileMenu = function() {
-                const mobileMenu = document.getElementById('mobileMenu');
-                mobileMenu.classList.toggle('show');
-            };
+        window.toggleMobileMenu = function () {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('show');
+        };
     </script>
 </body>
+
 </html>

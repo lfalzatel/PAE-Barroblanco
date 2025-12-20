@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@ fetch("js/estudiantes-bachillerato.json")
 <script>
   cargarDatosPAE().then(() => inicializarPAE());
 </script> -->
-<!-- <script>
+    <!-- <script>
   // Cargar datos del JSON cuando se cargue la página
   document.addEventListener('DOMContentLoaded', function() {
       cargarDatosPAE().then(() => {
@@ -33,64 +34,64 @@ fetch("js/estudiantes-bachillerato.json")
       });
   });
 </script> -->
-<script>
-  // Variable global para verificar si los datos están cargados
-  let datosJSONCargados = false;
-  
-  // Cargar datos del JSON cuando se cargue la página
-  document.addEventListener('DOMContentLoaded', function() {
-      console.log('🔄 Iniciando carga de datos PAE...');
-      
-      cargarDatosPAE().then(() => {
-          datosJSONCargados = true;
-          console.log('✅ Sistema PAE inicializado con datos del JSON');
-          console.log('📊 Total de estudiantes cargados:', BARROBLANCO_DATA.students ? BARROBLANCO_DATA.students.length : 0);
-          
-          // Mostrar notificación visual
-          if (typeof showNotification === 'function') {
-              showNotification('Datos de estudiantes cargados correctamente', 'success');
-          }
-      }).catch(err => {
-          console.error('❌ Error cargando datos PAE:', err);
-          if (typeof showNotification === 'function') {
-              showNotification('Error cargando datos de estudiantes', 'error');
-          }
-      });
-  });
-</script>
+    <script>
+        // Variable global para verificar si los datos están cargados
+        let datosJSONCargados = false;
+
+        // Cargar datos del JSON cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🔄 Iniciando carga de datos PAE...');
+
+            cargarDatosPAE().then(() => {
+                datosJSONCargados = true;
+                console.log('✅ Sistema PAE inicializado con datos del JSON');
+                console.log('📊 Total de estudiantes cargados:', BARROBLANCO_DATA.students ? BARROBLANCO_DATA.students.length : 0);
+
+                // Mostrar notificación visual
+                if (typeof showNotification === 'function') {
+                    showNotification('Datos de estudiantes cargados correctamente', 'success');
+                }
+            }).catch(err => {
+                console.error('❌ Error cargando datos PAE:', err);
+                if (typeof showNotification === 'function') {
+                    showNotification('Error cargando datos de estudiantes', 'error');
+                }
+            });
+        });
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         .student-card {
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .student-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .status-received {
             border-left: 4px solid #22c55e;
         }
-        
+
         .status-not-received {
             border-left: 4px solid #ef4444;
         }
-        
+
         .status-not-attended {
             border-left: 4px solid #6b7280;
         }
-        
+
         .status-pending {
             border-left: 4px solid #f59e0b;
         }
-        
+
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -99,54 +100,54 @@ fetch("js/estudiantes-bachillerato.json")
             font-size: 0.75rem;
             font-weight: 500;
         }
-        
+
         .badge-received {
             background-color: #dcfce7;
             color: #166534;
         }
-        
+
         .badge-not-received {
             background-color: #fee2e2;
             color: #991b1b;
         }
-        
+
         .badge-not-attended {
             background-color: #f3f4f6;
             color: #374151;
         }
-        
+
         .badge-pending {
             background-color: #fef3c7;
             color: #92400e;
         }
-        
+
         .search-input {
             transition: all 0.3s ease;
         }
-        
+
         .search-input:focus {
             transform: scale(1.02);
             box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
         }
-        
+
         .modal {
             transition: all 0.3s ease;
         }
-        
+
         .modal.show {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .modal-content {
             transform: translateY(-50px);
             transition: transform 0.3s ease;
         }
-        
+
         .modal.show .modal-content {
             transform: translateY(0);
         }
-        
+
         .qr-container {
             display: flex;
             justify-content: center;
@@ -156,77 +157,79 @@ fetch("js/estudiantes-bachillerato.json")
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
+
         .attendance-option {
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .attendance-option:hover {
             transform: scale(1.05);
         }
-        
+
         .attendance-option.selected {
             transform: scale(1.1);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
-        
+
         .sede-card {
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .sede-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .sede-card.selected {
             border: 2px solid #1e3a8a;
             background: #eff6ff;
         }
-        
+
         .group-card {
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .group-card:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .group-card.selected {
             border: 2px solid #1e3a8a;
             background: #eff6ff;
         }
-        
+
         .special-group {
             border-left: 4px solid #f59e0b;
         }
-        
+
         .mobile-nav-button {
             display: none;
         }
-        
+
         @media (max-width: 768px) {
             .desktop-nav {
                 display: none;
             }
+
             .mobile-nav-button {
                 display: block;
             }
         }
+
         /* Mobile Menu */
         .mobile-menu {
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
-        
+
         .mobile-menu.show {
             transform: translateX(0);
         }
-        
+
         .mobile-nav-item {
             padding: 1rem;
             border-bottom: 1px solid #e5e7eb;
@@ -235,21 +238,22 @@ fetch("js/estudiantes-bachillerato.json")
             color: #374151;
             font-weight: 500;
         }
-        
+
         .mobile-nav-item:hover {
             background-color: #f3f4f6;
             color: #1e3a8a;
         }
-        
+
         @media (max-width: 768px) {
             .desktop-nav {
                 display: none;
             }
+
             .mobile-nav-button {
                 display: block;
             }
         }
-        
+
         @media (min-width: 769px) {
             .mobile-nav-button {
                 display: none;
@@ -257,8 +261,9 @@ fetch("js/estudiantes-bachillerato.json")
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
-<!-- <button id="guardarBtn">Guardar asistencia</button> -->
+    <!-- <button id="guardarBtn">Guardar asistencia</button> -->
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -272,20 +277,25 @@ fetch("js/estudiantes-bachillerato.json")
                 <!-- Desktop Navigation -->
                 <!-- esta clase pone en azul y con una linea debajo el item seleccionado class"nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2" -->
                 <div class="desktop-nav flex items-center space-x-6">
-                    <a href="index.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="index.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-home mr-2"></i>Inicio</a>
-                    <a href="registro-mejorado.html" class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
+                    <a href="registro-mejorado.html"
+                        class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
                         <i class="fas fa-clipboard-check mr-2"></i>Registro</a>
-                    <a href="qr-generator.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="qr-generator.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-qrcode mr-2"></i>Códigos QR</a>
-                    <a href="reportes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="reportes-barroblanco.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
-                    <a href="estudiantes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="estudiantes-barroblanco.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-users mr-2"></i>Estudiantes</a>
                     <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
                         <i class="fas fa-sign-out-alt mr-2"></i>Salir</button>
                 </div>
-                
+
                 <!-- Mobile Navigation Button -->
                 <div class="mobile-nav-button flex items-center">
                     <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-800 p-2">
@@ -294,9 +304,10 @@ fetch("js/estudiantes-bachillerato.json")
                 </div>
             </div>
         </div>
-        
+
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 "> <!-- lg:hidden oculta el elemento cuando la pantalla es grande, por lo cual el toggle no se activa -->
+        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 ">
+            <!-- lg:hidden oculta el elemento cuando la pantalla es grande, por lo cual el toggle no se activa -->
             <div class="py-4">
                 <a href="index.html" class="mobile-nav-item">
                     <i class="fas fa-home mr-3"></i>Inicio</a>
@@ -318,14 +329,14 @@ fetch("js/estudiantes-bachillerato.json")
             <div class="text-center">
                 <h1 class="text-4xl font-bold text-gray-900 mb-4">Registro de Asistencia PAE</h1>
                 <p class="text-xl text-gray-600 mb-6">Fecha: <span id="currentDate"></span></p>
-                
+
                 <!-- Sede Selection -->
                 <div class="bg-white rounded-xl shadow-lg p-6 mb-6 max-w-4xl mx-auto">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Seleccionar Sede</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="sedeSelection">
                         <!-- Sedes will be loaded here dynamically -->
                     </div>
-                    
+
                     <!-- Group Selection -->
                     <div id="groupSelection" class="hidden">
                         <h4 class="text-lg font-semibold text-gray-800 mb-4">Seleccionar Grupo</h4>
@@ -333,21 +344,26 @@ fetch("js/estudiantes-bachillerato.json")
                             <!-- Groups will be loaded here dynamically -->
                         </div>
                         <div class="flex justify-center mt-6">
-                            <button onclick="loadSelectedGroup()" id="loadGroupBtn" class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <button onclick="loadSelectedGroup()" id="loadGroupBtn"
+                                class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled>
                                 <i class="fas fa-users mr-2"></i>Cargar Estudiantes del Grupo
                             </button>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="flex flex-wrap justify-center gap-4">
-                    <button onclick="markAllStatus('received')" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <button onclick="markAllStatus('received')"
+                        class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                         <i class="fas fa-check-double mr-2"></i>Todos Recibieron
                     </button>
-                    <button onclick="openBulkNoveltyModal()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <button onclick="openBulkNoveltyModal()"
+                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                         <i class="fas fa-exclamation-triangle mr-2"></i>Registrar Novedad Masiva
                     </button>
-                    <button onclick="saveAttendance()" class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <button onclick="saveAttendance()"
+                        class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                         <i class="fas fa-save mr-2"></i>Guardar Registro
                     </button>
                 </div>
@@ -365,7 +381,8 @@ fetch("js/estudiantes-bachillerato.json")
                     <span class="text-sm font-medium text-gray-700" id="progressText">0 / 0</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-3">
-                    <div class="bg-blue-800 h-3 rounded-full transition-all duration-500" id="progressBar" style="width: 0%"></div>
+                    <div class="bg-blue-800 h-3 rounded-full transition-all duration-500" id="progressBar"
+                        style="width: 0%"></div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
                     <div class="text-center">
@@ -392,11 +409,12 @@ fetch("js/estudiantes-bachillerato.json")
                 <!-- Students will be loaded here -->
             </div>
         </div>
-        
+
     </section>
 
     <!-- Novelty Modal -->
-    <div id="noveltyModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
+    <div id="noveltyModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
         <div class="modal-content bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex justify-between items-center">
@@ -410,7 +428,8 @@ fetch("js/estudiantes-bachillerato.json")
                 <form id="noveltyForm" class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Novedad</label>
-                        <select id="noveltyType" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
+                        <select id="noveltyType"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
                             <option value="">Seleccionar tipo</option>
                             <option value="alergia">Reacción Alérgica</option>
                             <option value="rechazo">Rechazo del Alimento</option>
@@ -423,14 +442,15 @@ fetch("js/estudiantes-bachillerato.json")
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Descripción de la Novedad</label>
-                        <textarea id="noveltyDescription" rows="4" 
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800"
-                                  placeholder="Describa detalladamente la novedad ocurrida..."></textarea>
+                        <textarea id="noveltyDescription" rows="4"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800"
+                            placeholder="Describa detalladamente la novedad ocurrida..."></textarea>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Gravedad</label>
-                            <select id="noveltySeverity" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
+                            <select id="noveltySeverity"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
                                 <option value="baja">Baja</option>
                                 <option value="media">Media</option>
                                 <option value="alta">Alta</option>
@@ -439,19 +459,20 @@ fetch("js/estudiantes-bachillerato.json")
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">¿Requiere Seguimiento?</label>
-                            <select id="noveltyFollowUp" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
+                            <select id="noveltyFollowUp"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-800">
                                 <option value="no">No</option>
                                 <option value="si">Sí</option>
                             </select>
                         </div>
                     </div>
                     <div class="flex justify-end space-x-4 pt-4">
-                        <button type="button" onclick="closeNoveltyModal()" 
-                                class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                        <button type="button" onclick="closeNoveltyModal()"
+                            class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                             Cancelar
                         </button>
-                        <button type="submit" 
-                                class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors">
+                        <button type="submit"
+                            class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors">
                             <i class="fas fa-save mr-2"></i>Registrar Novedad
                         </button>
                     </div>
@@ -461,7 +482,8 @@ fetch("js/estudiantes-bachillerato.json")
     </div>
 
     <!-- QR Modal -->
-    <div id="qrModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
+    <div id="qrModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible">
         <div class="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full mx-4">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex justify-between items-center">
@@ -480,10 +502,12 @@ fetch("js/estudiantes-bachillerato.json")
                     <p class="text-xs text-gray-500" id="qrValidUntil"></p>
                 </div>
                 <div class="mt-4">
-                    <button onclick="generateNewQRCode()" class="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg text-sm transition-colors mr-2">
+                    <button onclick="generateNewQRCode()"
+                        class="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg text-sm transition-colors mr-2">
                         <i class="fas fa-sync-alt mr-1"></i>Nuevo Código
                     </button>
-                    <button onclick="downloadQRCode()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    <button onclick="downloadQRCode()"
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
                         <i class="fas fa-download mr-1"></i>Descargar
                     </button>
                 </div>
@@ -491,23 +515,26 @@ fetch("js/estudiantes-bachillerato.json")
         </div>
     </div>
     <div class="flex justify-center mt-6">
-    <button onclick="saveAttendance()" class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                        <i class="fas fa-save mr-2"></i>Guardar Registro
-    </button>
+        <button onclick="saveAttendance()"
+            class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <i class="fas fa-save mr-2"></i>Guardar Registro
+        </button>
     </div>
-</body>
+
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar. Todos los derechos reservados.</p>
+            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar.
+                Todos los derechos reservados.</p>
         </div>
     </footer>
 
+    <script src="js/auth.js"></script>
     <script>
         // ========================================
         // SISTEMA DE IMÁGENES DE ESTUDIANTES
         // ========================================
-        
+
         // Pool de imágenes de estudiantes MUJERES (Unsplash)
         const IMAGENES_MUJERES = [
             'photo-1494790108377-be9c29b29330', // Mujer joven sonriente
@@ -578,15 +605,15 @@ fetch("js/estudiantes-bachillerato.json")
 
         // Nombres comunes femeninos en Colombia
         const NOMBRES_FEMENINOS = [
-            'MARIA', 'ANA', 'SOFIA', 'VALENTINA', 'ISABELLA', 'CAMILA', 'VALERIA', 
-            'DANIELA', 'PAULA', 'ALEJANDRA', 'ANDREA', 'CAROLINA', 'LAURA', 'SARA', 
+            'MARIA', 'ANA', 'SOFIA', 'VALENTINA', 'ISABELLA', 'CAMILA', 'VALERIA',
+            'DANIELA', 'PAULA', 'ALEJANDRA', 'ANDREA', 'CAROLINA', 'LAURA', 'SARA',
             'NATALIA', 'JULIANA', 'CATALINA', 'GABRIELA', 'LUISA', 'MARIANA',
             'KATHERINE', 'MELISSA', 'DIANA', 'PAOLA', 'JESSICA', 'TATIANA',
             'MANUELA', 'LUNA', 'EMMA', 'MIA', 'LUCIANA', 'ANTONELLA', 'EMILIA',
-            'GUADALUPE', 'SAMANTHA', 'HELEN', 'NICKEL', 'ASHLEY', 'NAOMI', 
+            'GUADALUPE', 'SAMANTHA', 'HELEN', 'NICKEL', 'ASHLEY', 'NAOMI',
             'GREYSI', 'ROXANA', 'ERIKA', 'SUSANA', 'LUISA', 'NATHALY', 'JUDITH',
             'GERALDINE', 'ESTEFANIA', 'KAROL', 'KAREN', 'YULIANA', 'MARLON',
-            'SALOME', 'ZAIRA', 'TATIANA', 'JOHALICE', 'ADRIANA', 'ISABEL', 
+            'SALOME', 'ZAIRA', 'TATIANA', 'JOHALICE', 'ADRIANA', 'ISABEL',
             'DOMINIQUE', 'PAULINA', 'ANTONIA', 'NICOLE', 'SHERLI', 'JULIETA',
             // Nombres adicionales del dataset real
             'MELISA', 'DULCE', 'ALISSON', 'VICTORIA', 'ANGELICA', 'VIOLETTA',
@@ -625,10 +652,10 @@ fetch("js/estudiantes-bachillerato.json")
          */
         function detectarGenero(nombreCompleto) {
             if (!nombreCompleto) return 'U';
-            
+
             const nombreUpper = nombreCompleto.toUpperCase();
             const palabras = nombreUpper.split(' ').filter(p => p.length > 0);
-            
+
             // PRIMERO: Buscar nombres específicos en TODO el nombre completo
             // (esto funciona tanto para "VALERIA JURADO" como "AREIZA GIL VALERIA")
             for (const palabra of palabras) {
@@ -636,31 +663,31 @@ fetch("js/estudiantes-bachillerato.json")
                     return 'F';
                 }
             }
-            
+
             for (const palabra of palabras) {
                 if (NOMBRES_MASCULINOS.some(nombre => palabra.includes(nombre) || nombre.includes(palabra))) {
                     return 'M';
                 }
             }
-            
+
             // SEGUNDO: Si no se encuentra, analizar las ÚLTIMAS palabras (son los nombres, no apellidos)
             // En formato colombiano: "AREIZA GIL VALERIA" → las últimas 1-2 palabras son nombres
             const ultimaPalabra = palabras[palabras.length - 1];
             const penultimaPalabra = palabras.length > 1 ? palabras[palabras.length - 2] : '';
-            
+
             // Analizar terminaciones de las ÚLTIMAS palabras (nombres reales)
             if (ultimaPalabra) {
                 // Terminaciones típicamente femeninas
                 if ((ultimaPalabra.endsWith('A') && !ultimaPalabra.endsWith('CIA') && !ultimaPalabra.endsWith('RIA')) ||
-                    ultimaPalabra.endsWith('IE') || 
-                    ultimaPalabra.endsWith('ELA') || 
+                    ultimaPalabra.endsWith('IE') ||
+                    ultimaPalabra.endsWith('ELA') ||
                     ultimaPalabra.endsWith('INA') ||
                     ultimaPalabra.endsWith('ETH') ||
                     ultimaPalabra.endsWith('LY')) {
                     return 'F';
                 }
             }
-            
+
             // Analizar también la penúltima palabra (nombres compuestos como "MARIA VICTORIA")
             if (penultimaPalabra) {
                 if (NOMBRES_FEMENINOS.some(nombre => penultimaPalabra.includes(nombre))) {
@@ -670,7 +697,7 @@ fetch("js/estudiantes-bachillerato.json")
                     return 'M';
                 }
             }
-            
+
             // Por defecto masculino si no se puede determinar con certeza
             return 'M';
         }
@@ -685,34 +712,34 @@ fetch("js/estudiantes-bachillerato.json")
                 console.warn('⚠️ Student sin datos completos:', student);
                 return 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face';
             }
-            
+
             const genero = detectarGenero(student.name);
             const imagenesPool = genero === 'F' ? IMAGENES_MUJERES : IMAGENES_HOMBRES;
-            
+
             // Usar el ID del estudiante para generar un índice consistente
             let hash = 0;
             for (let i = 0; i < student.id.length; i++) {
                 hash = ((hash << 5) - hash) + student.id.charCodeAt(i);
                 hash = hash & hash; // Convert to 32bit integer
             }
-            
+
             // Convertir a índice positivo
             const index = Math.abs(hash) % imagenesPool.length;
             const imageId = imagenesPool[index];
-            
+
             // Retornar URL completa de Unsplash con parámetros optimizados
             const imageUrl = `https://images.unsplash.com/${imageId}?w=150&h=150&fit=crop&crop=face`;
-            
+
             // Log solo para primeros 3 estudiantes (evitar spam en consola)
             if (window.imageDebugCount === undefined) window.imageDebugCount = 0;
             if (window.imageDebugCount < 3) {
                 console.log(`📸 ${student.name} → ${genero === 'F' ? '👩' : '👨'} ${genero} → ${imageUrl}`);
                 window.imageDebugCount++;
             }
-            
+
             return imageUrl;
         }
-        
+
         // Enhanced student data with complete information
         const students = [];
 
@@ -724,7 +751,7 @@ fetch("js/estudiantes-bachillerato.json")
         let selectedStudentForNovelty = null;
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Set current date
             const today = new Date();
             document.getElementById('currentDate').textContent = today.toLocaleDateString('es-CO', {
@@ -741,16 +768,16 @@ fetch("js/estudiantes-bachillerato.json")
             document.getElementById('noveltyForm').addEventListener('submit', saveNovelty);
 
             // Mobile menu functionality
-            window.toggleMobileMenu = function() {
+            window.toggleMobileMenu = function () {
                 const mobileMenu = document.getElementById('mobileMenu');
                 mobileMenu.classList.toggle('show');
             };
 
             // Close mobile menu when clicking outside
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 const mobileMenu = document.getElementById('mobileMenu');
                 const mobileButton = document.querySelector('.mobile-nav-button button');
-                
+
                 if (!mobileMenu.contains(e.target) && !mobileButton.contains(e.target)) {
                     mobileMenu.classList.remove('show');
                 }
@@ -760,25 +787,25 @@ fetch("js/estudiantes-bachillerato.json")
         function loadSedes() {
             const sedeSelection = document.getElementById('sedeSelection');
             const sedes = BARROBLANCO_DATA.methods.getAllSedes();
-            
+
             sedeSelection.innerHTML = '';
-            
+
             sedes.forEach(sede => {
                 const card = document.createElement('div');
                 card.className = 'sede-card bg-white rounded-lg p-4 border-2 border-gray-200';
                 card.onclick = () => selectSede(sede.id);
-                
-                const iconClass = sede.id === 'principal' ? 'fa-building' : 
-                                 sede.id === 'primaria' ? 'fa-child' : 'fa-church';
+
+                const iconClass = sede.id === 'principal' ? 'fa-building' :
+                    sede.id === 'primaria' ? 'fa-child' : 'fa-church';
                 const bgClass = sede.id === 'principal' ? 'from-blue-50 to-blue-100' :
-                               sede.id === 'primaria' ? 'from-green-50 to-green-100' :
-                               'from-purple-50 to-purple-100';
-                
+                    sede.id === 'primaria' ? 'from-green-50 to-green-100' :
+                        'from-purple-50 to-purple-100';
+
                 card.innerHTML = `
                     <div class="flex items-center mb-3">
                         
-                        <i class="fas ${iconClass} text-2xl mr-3 ${sede.id === 'principal' ? 'text-blue-800' : 
-                           sede.id === 'primaria' ? 'text-green-700' : 'text-purple-700'}"></i>
+                        <i class="fas ${iconClass} text-2xl mr-3 ${sede.id === 'principal' ? 'text-blue-800' :
+                        sede.id === 'primaria' ? 'text-green-700' : 'text-purple-700'}"></i>
                         <div>
                             <h3 class="font-bold text-gray-800">${sede.name}</h3>
                             <p class="text-sm text-gray-600">${sede.grades}</p>
@@ -789,7 +816,7 @@ fetch("js/estudiantes-bachillerato.json")
                         <p><strong>Estudiantes:</strong> ${sede.totalStudents}</p>
                     </div>
                 `;
-                
+
                 sedeSelection.appendChild(card);
             });
         }
@@ -799,13 +826,13 @@ fetch("js/estudiantes-bachillerato.json")
             document.querySelectorAll('.sede-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            
+
             // Add selection to clicked card
             event.currentTarget.classList.add('selected');
-            
+
             currentSede = sedeId;
             loadGroupsBySede(sedeId);
-            
+
             // Show group selection
             document.getElementById('groupSelection').classList.remove('hidden');
         }
@@ -813,21 +840,21 @@ fetch("js/estudiantes-bachillerato.json")
         function loadGroupsBySede(sedeId) {
             const groups = BARROBLANCO_DATA.methods.getGroupsBySede(sedeId);
             const groupGrid = document.getElementById('groupGrid');
-            
+
             groupGrid.innerHTML = '';
-            
+
             groups.forEach(group => {
                 const card = document.createElement('div');
                 card.className = `group-card bg-white rounded-lg p-3 border-2 border-gray-200 text-center ${group.type === 'sordos' ? 'special-group' : ''}`;
                 card.onclick = () => selectGroup(group.id);
-                
+
                 card.innerHTML = `
                     <div class="font-bold text-gray-800">${group.name}</div>
                     <div class="text-sm text-gray-600">${group.grade}</div>
                     <div class="text-xs text-gray-500">${group.students} estudiantes</div>
                     ${group.type === 'sordos' ? '<div class="text-xs text-yellow-600 font-medium">Sordos</div>' : ''}
                 `;
-                
+
                 groupGrid.appendChild(card);
             });
         }
@@ -837,12 +864,12 @@ fetch("js/estudiantes-bachillerato.json")
             document.querySelectorAll('.group-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            
+
             // Add selection to clicked card
             event.currentTarget.classList.add('selected');
-            
+
             currentGroup = groupId;
-            
+
             // Enable load button
             const loadBtn = document.getElementById('loadGroupBtn');
             loadBtn.disabled = false;
@@ -854,13 +881,13 @@ fetch("js/estudiantes-bachillerato.json")
                 showNotification('Por favor seleccione sede y grupo', 'warning');
                 return;
             }
-            
+
             const group = BARROBLANCO_DATA.methods.getGroupById(currentGroup);
             const students = BARROBLANCO_DATA.methods.getStudentsBySede(currentSede)
                 .filter(s => s.groupId === currentGroup);
-            
+
             filteredStudents = students;
-            
+
             // Initialize attendance status
             students.forEach(student => {
                 attendanceStatus[student.id] = {
@@ -869,11 +896,11 @@ fetch("js/estudiantes-bachillerato.json")
                     timestamp: null
                 };
             });
-            
+
             renderStudentsGrid();
             updateProgress();
             updateCounts();
-            
+
             showNotification(`Cargados ${students.length} estudiantes del grupo ${group.name}`, 'success');
         }
 
@@ -885,10 +912,10 @@ fetch("js/estudiantes-bachillerato.json")
                 const status = attendanceStatus[student.id].status;
                 const card = document.createElement('div');
                 card.className = `student-card status-${status} bg-white rounded-xl shadow-lg p-4`;
-                
+
                 const isSordos = student.type === 'sordos';
                 const sordosBadge = isSordos ? '<div class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Sordos</div>' : '';
-                
+
                 card.innerHTML = `
                     <div class="relative">
                         ${sordosBadge}
@@ -958,11 +985,11 @@ fetch("js/estudiantes-bachillerato.json")
                 status: status,
                 timestamp: new Date().toISOString()
             };
-            
+
             renderStudentsGrid();
             updateProgress();
             updateCounts();
-            
+
             const student = filteredStudents.find(s => s.id === studentId);
             showNotification(`Asistencia registrada: ${student.name} - ${getStatusText(status)}`, 'success');
         }
@@ -972,18 +999,18 @@ fetch("js/estudiantes-bachillerato.json")
                 showNotification('No hay estudiantes cargados', 'warning');
                 return;
             }
-            
+
             filteredStudents.forEach(student => {
                 attendanceStatus[student.id] = {
                     status: status,
                     timestamp: new Date().toISOString()
                 };
             });
-            
+
             renderStudentsGrid();
             updateProgress();
             updateCounts();
-            
+
             showNotification(`Todos los estudiantes marcados como: ${getStatusText(status)}`, 'success');
         }
 
@@ -1009,7 +1036,7 @@ fetch("js/estudiantes-bachillerato.json")
         }
 
         function getStatusIcon(status) {
-            switch(status) {
+            switch (status) {
                 case 'received': return '<i class="fas fa-utensils"></i>';
                 case 'not-received': return '<i class="fas fa-times"></i>';
                 case 'not-attended': return '<i class="fas fa-user-slash"></i>';
@@ -1019,7 +1046,7 @@ fetch("js/estudiantes-bachillerato.json")
         }
 
         function getStatusText(status) {
-            switch(status) {
+            switch (status) {
                 case 'received': return 'Recibió';
                 case 'not-received': return 'No Recibió';
                 case 'not-attended': return 'No Asistió';
@@ -1051,7 +1078,7 @@ fetch("js/estudiantes-bachillerato.json")
 
         function saveNovelty(e) {
             e.preventDefault();
-            
+
             const noveltyData = {
                 type: document.getElementById('noveltyType').value,
                 description: document.getElementById('noveltyDescription').value,
@@ -1099,7 +1126,7 @@ fetch("js/estudiantes-bachillerato.json")
             // Generate QR code
             const qrCodeDiv = document.getElementById('qrCode');
             qrCodeDiv.innerHTML = '';
-            
+
             QRCode.toCanvas(qrCodeDiv, JSON.stringify(qrData), {
                 width: 200,
                 margin: 2,
@@ -1157,31 +1184,31 @@ fetch("js/estudiantes-bachillerato.json")
                 sedeInfo: BARROBLANCO_DATA.methods.getSedeById(currentSede),
                 groupInfo: BARROBLANCO_DATA.methods.getGroupById(currentGroup)
             };
-            
+
             localStorage.setItem('barroblanco_attendance', JSON.stringify(attendanceData));
             showNotification('Registro de asistencia guardado exitosamente', 'success');
         }
 
         function showNotification(message, type) {
             const notification = document.createElement('div');
-            const bgColor = type === 'success' ? 'bg-green-500' : 
-                           type === 'error' ? 'bg-red-500' : 
-                           type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+            const bgColor = type === 'success' ? 'bg-green-500' :
+                type === 'error' ? 'bg-red-500' :
+                    type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
             notification.className = `fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg ${bgColor} text-white max-w-sm`;
             notification.innerHTML = `
                 <div class="flex items-center">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 
-                                   type === 'error' ? 'fa-exclamation-circle' : 
-                                   type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} mr-3"></i>
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' :
+                    type === 'error' ? 'fa-exclamation-circle' :
+                        type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle'} mr-3"></i>
                     <span class="flex-1">${message}</span>
                     <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
             `;
-            
+
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.remove();
             }, 3000);
@@ -1194,4 +1221,5 @@ fetch("js/estudiantes-bachillerato.json")
         }
     </script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +12,11 @@
     <script src="js/barroblanco-data.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         .modal {
             display: none;
             position: fixed;
@@ -26,13 +27,13 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
-        
+
         .modal.show {
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        
+
         .modal-content {
             background: white;
             border-radius: 1rem;
@@ -41,7 +42,7 @@
             overflow-y: auto;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        
+
         .attendance-badge {
             display: inline-flex;
             align-items: center;
@@ -50,22 +51,22 @@
             font-size: 0.75rem;
             font-weight: 500;
         }
-        
+
         .attended {
             background-color: #dcfce7;
             color: #166534;
         }
-        
+
         .not-attended {
             background-color: #fee2e2;
             color: #991b1b;
         }
-        
+
         .absent {
             background-color: #f3f4f6;
             color: #4b5563;
         }
-        
+
         .sede-badge {
             display: inline-flex;
             align-items: center;
@@ -74,36 +75,37 @@
             font-size: 0.75rem;
             font-weight: 500;
         }
-        
+
         .sede-principal {
             background-color: #dbeafe;
             color: #1e40af;
         }
-        
+
         .sede-primaria {
             background-color: #d1fae5;
             color: #065f46;
         }
-        
+
         .sede-maria-inmaculada {
             background-color: #fef3c7;
             color: #92400e;
         }
-        
+
         .table-container {
             max-height: 500px;
             overflow-y: auto;
         }
+
         /* Mobile Menu */
         .mobile-menu {
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
-        
+
         .mobile-menu.show {
             transform: translateX(0);
         }
-        
+
         .mobile-nav-item {
             padding: 1rem;
             border-bottom: 1px solid #e5e7eb;
@@ -112,21 +114,22 @@
             color: #374151;
             font-weight: 500;
         }
-        
+
         .mobile-nav-item:hover {
             background-color: #f3f4f6;
             color: #1e3a8a;
         }
-        
+
         @media (max-width: 768px) {
             .desktop-nav {
                 display: none;
             }
+
             .mobile-nav-button {
                 display: block;
             }
         }
-        
+
         @media (min-width: 769px) {
             .mobile-nav-button {
                 display: none;
@@ -134,13 +137,15 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
                         <i class="fas fa-utensils text-white text-lg"></i>
                     </div>
                     <div>
@@ -149,15 +154,20 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-6">
-                    <a href="index.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="index.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-home mr-2"></i>Inicio</a>
-                    <a href="registro-mejorado.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="registro-mejorado.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-clipboard-check mr-2"></i>Registro</a>
-                    <a href="qr-generator.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="qr-generator.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-qrcode mr-2"></i>Códigos QR</a>
-                    <a href="reportes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
+                    <a href="reportes-barroblanco.html"
+                        class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
-                    <a href="estudiantes-barroblanco.html" class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
+                    <a href="estudiantes-barroblanco.html"
+                        class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
                         <i class="fas fa-users mr-2"></i>Estudiantes</a>
                     <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
                         <i class="fas fa-sign-out-alt mr-2"></i>Salir</button>
@@ -184,7 +194,7 @@
                 <a href="estudiantes-barroblanco.html" class="mobile-nav-item text-blue-800">
                     <i class="fas fa-users mr-3"></i>Estudiantes</a>
                 <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
-                        <i class="fas fa-sign-out-alt mr-3"></i>Salir</button>
+                    <i class="fas fa-sign-out-alt mr-3"></i>Salir</button>
             </div>
         </div>
     </nav>
@@ -200,7 +210,8 @@
                         <p class="text-gray-600 mt-1">Historial de asistencia y reportes por grupo</p>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="exportarExcelCompleto()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                        <button onclick="exportarExcelCompleto()"
+                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                             <i class="fas fa-file-excel mr-2"></i>Exportar Excel
                         </button>
                     </div>
@@ -215,33 +226,41 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Sede</label>
-                        <select id="sedeFilter" onchange="cargarGrupos()" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <select id="sedeFilter" onchange="cargarGrupos()"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="">Todas las sedes</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Grupo</label>
-                        <select id="grupoFilter" onchange="aplicarFiltros()" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <select id="grupoFilter" onchange="aplicarFiltros()"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="">Todos los grupos</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Buscar Estudiante</label>
-                        <input type="text" id="searchStudent" placeholder="Nombre o matrícula..." onkeyup="filtrarEstudiantes()" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" id="searchStudent" placeholder="Nombre o matrícula..."
+                            onkeyup="filtrarEstudiantes()"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Rango de Fechas</label>
                         <div class="flex gap-2">
-                            <input type="date" id="startDate" onchange="aplicarFiltros()" class="flex-1 border border-gray-300 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-blue-500">
-                            <input type="date" id="endDate" onchange="aplicarFiltros()" class="flex-1 border border-gray-300 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                            <input type="date" id="startDate" onchange="aplicarFiltros()"
+                                class="flex-1 border border-gray-300 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                            <input type="date" id="endDate" onchange="aplicarFiltros()"
+                                class="flex-1 border border-gray-300 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
                 </div>
                 <div class="mt-4 flex gap-3">
-                    <button onclick="aplicarFiltros()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    <button onclick="aplicarFiltros()"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-search mr-2"></i>Buscar
                     </button>
-                    <button onclick="limpiarFiltros()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    <button onclick="limpiarFiltros()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         <i class="fas fa-redo mr-2"></i>Limpiar
                     </button>
                 </div>
@@ -306,13 +325,27 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50 sticky top-0">
                             <tr>
-                                <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estudiante</th>
-                                <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matrícula</th>
-                                <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grupo</th>
-                                <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sede</th>
-                                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Días</th>
-                                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">% Asistencia</th>
-                                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                <th
+                                    class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Estudiante</th>
+                                <th
+                                    class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Matrícula</th>
+                                <th
+                                    class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Grupo</th>
+                                <th
+                                    class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Sede</th>
+                                <th
+                                    class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Días</th>
+                                <th
+                                    class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    % Asistencia</th>
+                                <th
+                                    class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="studentsTableBody" class="bg-white divide-y divide-gray-200">
@@ -381,7 +414,8 @@
                     <h4 class="text-lg font-semibold text-gray-900">
                         <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>Historial de Asistencia
                     </h4>
-                    <button onclick="exportarExcelEstudiante()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                    <button onclick="exportarExcelEstudiante()"
+                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
                         <i class="fas fa-file-excel mr-2"></i>Exportar Historial
                     </button>
                 </div>
@@ -390,7 +424,8 @@
                         <thead class="bg-gray-50 sticky top-0">
                             <tr>
                                 <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase">Estado</th>
+                                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase">Estado
+                                </th>
                                 <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Novedad</th>
                             </tr>
                         </thead>
@@ -403,6 +438,7 @@
         </div>
     </div>
 
+    <script src="js/auth.js"></script>
     <script>
         // ========================================
         // VARIABLES GLOBALES
@@ -415,18 +451,18 @@
         // ========================================
         // INICIALIZACIÓN
         // ========================================
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('🚀 Iniciando aplicación...');
-            
+
             // Verificar que BARROBLANCO_DATA esté disponible
             if (typeof BARROBLANCO_DATA === 'undefined') {
                 console.error('❌ BARROBLANCO_DATA no está definido');
                 showNotification('Error: No se pudo cargar barroblanco-data.js. Verifica que el archivo esté en js/barroblanco-data.js', 'error');
                 return;
             }
-            
+
             console.log('✅ BARROBLANCO_DATA cargado correctamente');
-            
+
             // Cargar datos PAE si la función existe
             if (typeof cargarDatosPAE === 'function') {
                 console.log('📚 Cargando datos PAE...');
@@ -458,24 +494,24 @@
         // ========================================
         function cargarTodosLosEstudiantes() {
             allStudents = [];
-            
+
             // Cargar estudiantes de todas las sedes
             const sedes = BARROBLANCO_DATA.methods.getAllSedes();
             console.log('📊 Sedes disponibles:', sedes.length);
-            
+
             sedes.forEach(sede => {
                 const estudiantesSede = BARROBLANCO_DATA.methods.getStudentsBySede(sede.id);
                 console.log(`  - ${sede.name}: ${estudiantesSede.length} estudiantes`);
                 allStudents = allStudents.concat(estudiantesSede);
             });
-            
+
             console.log('📚 Total estudiantes cargados:', allStudents.length);
         }
 
         function cargarSedes() {
             const sedeSelect = document.getElementById('sedeFilter');
             sedeSelect.innerHTML = '<option value="">Todas las sedes</option>';
-            
+
             const sedes = BARROBLANCO_DATA.methods.getAllSedes();
             sedes.forEach(sede => {
                 const option = document.createElement('option');
@@ -483,7 +519,7 @@
                 option.textContent = sede.name;
                 sedeSelect.appendChild(option);
             });
-            
+
             console.log('✅ Sedes cargadas en el filtro');
         }
 
@@ -491,7 +527,7 @@
             const sedeId = document.getElementById('sedeFilter').value;
             const grupoSelect = document.getElementById('grupoFilter');
             grupoSelect.innerHTML = '<option value="">Todos los grupos</option>';
-            
+
             let grupos = [];
             if (sedeId) {
                 const sede = BARROBLANCO_DATA.methods.getSedeById(sedeId);
@@ -505,7 +541,7 @@
                     grupos = grupos.concat(sede.groups);
                 });
             }
-            
+
             grupos.forEach(grupo => {
                 const option = document.createElement('option');
                 option.value = grupo.id;
@@ -515,7 +551,7 @@
                 }
                 grupoSelect.appendChild(option);
             });
-            
+
             console.log('✅ Grupos cargados en el filtro:', grupos.length);
             aplicarFiltros();
         }
@@ -523,7 +559,7 @@
         function inicializarFechas() {
             const today = new Date();
             const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
-            
+
             document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
             document.getElementById('endDate').value = today.toISOString().split('T')[0];
         }
@@ -531,14 +567,14 @@
         function generarDatosSimulados() {
             const startDate = new Date(document.getElementById('startDate').value);
             const endDate = new Date(document.getElementById('endDate').value);
-            
+
             console.log('🎲 Generando datos simulados de asistencia...');
-            
+
             // Generate attendance records for each student
             allStudents.forEach(student => {
                 const studentKey = student.matricula || student.id;
                 attendanceRecords[studentKey] = [];
-                
+
                 let currentDate = new Date(startDate);
                 while (currentDate <= endDate) {
                     // Skip weekends
@@ -547,7 +583,7 @@
                         // Random attendance status (85% attended, 5% not received, 10% absent)
                         const rand = Math.random();
                         let status, novedad = '';
-                        
+
                         if (rand < 0.85) {
                             status = 'attended';
                         } else if (rand < 0.90) {
@@ -558,18 +594,18 @@
                             status = 'absent';
                             novedad = 'No asistió a clases';
                         }
-                        
+
                         attendanceRecords[studentKey].push({
                             fecha: currentDate.toISOString().split('T')[0],
                             estado: status,
                             novedad: novedad
                         });
                     }
-                    
+
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
             });
-            
+
             console.log('✅ Datos de asistencia simulados generados');
         }
 
@@ -579,18 +615,18 @@
         function aplicarFiltros() {
             const sedeId = document.getElementById('sedeFilter').value;
             const grupoId = document.getElementById('grupoFilter').value;
-            
+
             console.log('🔍 Aplicando filtros - Sede:', sedeId || 'Todas', 'Grupo:', grupoId || 'Todos');
-            
+
             // Filtrar estudiantes
             filteredStudents = allStudents.filter(student => {
                 if (sedeId && student.sede !== sedeId) return false;
                 if (grupoId && student.groupId !== grupoId) return false;
                 return true;
             });
-            
+
             console.log('✅ Estudiantes filtrados:', filteredStudents.length);
-            
+
             cargarEstudiantes();
             actualizarEstadisticas();
             showNotification(`Mostrando ${filteredStudents.length} estudiantes`, 'success');
@@ -599,7 +635,7 @@
         function cargarEstudiantes() {
             const tbody = document.getElementById('studentsTableBody');
             tbody.innerHTML = '';
-            
+
             if (filteredStudents.length === 0) {
                 tbody.innerHTML = `
                     <tr>
@@ -611,14 +647,14 @@
                 `;
                 return;
             }
-            
+
             filteredStudents.forEach(estudiante => {
                 const studentKey = estudiante.matricula || estudiante.id;
                 const records = attendanceRecords[studentKey] || [];
                 const diasAsistidos = records.filter(r => r.estado === 'attended').length;
                 const totalDias = records.length;
                 const porcentaje = totalDias > 0 ? ((diasAsistidos / totalDias) * 100).toFixed(1) : 0;
-                
+
                 // Buscar info del grupo
                 let grupo = null;
                 let isSordos = false;
@@ -630,9 +666,9 @@
                         break;
                     }
                 }
-                
+
                 const sede = BARROBLANCO_DATA.methods.getSedeById(estudiante.sede);
-                
+
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50';
                 row.innerHTML = `
@@ -671,14 +707,14 @@
                 `;
                 tbody.appendChild(row);
             });
-            
+
             console.log('✅ Tabla de estudiantes actualizada');
         }
 
         function filtrarEstudiantes() {
             const searchTerm = document.getElementById('searchStudent').value.toLowerCase();
             const rows = document.querySelectorAll('#studentsTableBody tr');
-            
+
             let visibleCount = 0;
             rows.forEach(row => {
                 const text = row.textContent.toLowerCase();
@@ -686,7 +722,7 @@
                 row.style.display = isVisible ? '' : 'none';
                 if (isVisible) visibleCount++;
             });
-            
+
             console.log(`🔍 Búsqueda: "${searchTerm}" - ${visibleCount} resultados`);
         }
 
@@ -704,7 +740,7 @@
         // ========================================
         function actualizarEstadisticas() {
             document.getElementById('totalEstudiantes').textContent = filteredStudents.length;
-            
+
             // Calculate average attendance
             let totalDias = 0;
             let totalAsistencias = 0;
@@ -716,11 +752,11 @@
             });
             const promedioAsistencia = totalDias > 0 ? ((totalAsistencias / totalDias) * 100).toFixed(1) : 0;
             document.getElementById('promedioAsistencia').textContent = promedioAsistencia + '%';
-            
+
             // Count active groups
             const gruposActivos = new Set(filteredStudents.map(e => e.groupId)).size;
             document.getElementById('gruposActivos').textContent = gruposActivos;
-            
+
             // Count novedades
             let totalNovedades = 0;
             filteredStudents.forEach(est => {
@@ -729,7 +765,7 @@
                 totalNovedades += records.filter(r => r.novedad).length;
             });
             document.getElementById('totalNovedades').textContent = totalNovedades;
-            
+
             console.log('📊 Estadísticas actualizadas');
         }
 
@@ -743,16 +779,16 @@
                 showNotification('Estudiante no encontrado', 'error');
                 return;
             }
-            
+
             const records = attendanceRecords[studentKey] || [];
             const diasRecibio = records.filter(r => r.estado === 'attended').length;
             const diasNoRecibio = records.filter(r => r.estado === 'not-received').length;
             const diasNoAsistio = records.filter(r => r.estado === 'absent').length;
             const totalDias = records.length;
             const porcentaje = totalDias > 0 ? ((diasRecibio / totalDias) * 100).toFixed(1) : 0;
-            
+
             const sede = BARROBLANCO_DATA.methods.getSedeById(estudiante.sede);
-            
+
             // Update modal content
             document.getElementById('modalStudentName').textContent = estudiante.name || estudiante.nombre || 'Sin nombre';
             document.getElementById('modalMatricula').textContent = estudiante.matricula || estudiante.id;
@@ -762,18 +798,18 @@
             document.getElementById('modalDiasNoRecibio').textContent = diasNoRecibio;
             document.getElementById('modalDiasNoAsistio').textContent = diasNoAsistio;
             document.getElementById('modalPorcentaje').textContent = porcentaje + '%';
-            
+
             // Load attendance history
             const historyBody = document.getElementById('attendanceHistoryBody');
             historyBody.innerHTML = '';
-            
+
             // Sort records by date (newest first)
             const sortedRecords = [...records].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-            
+
             sortedRecords.forEach(record => {
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50';
-                
+
                 let estadoBadge = '';
                 if (record.estado === 'attended') {
                     estadoBadge = '<span class="attendance-badge attended"><i class="fas fa-check mr-1"></i>Recibió</span>';
@@ -782,7 +818,7 @@
                 } else {
                     estadoBadge = '<span class="attendance-badge absent"><i class="fas fa-user-slash mr-1"></i>No Asistió</span>';
                 }
-                
+
                 row.innerHTML = `
                     <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${formatDate(record.fecha)}</td>
                     <td class="px-6 py-3 whitespace-nowrap text-center">${estadoBadge}</td>
@@ -790,7 +826,7 @@
                 `;
                 historyBody.appendChild(row);
             });
-            
+
             // Show modal
             document.getElementById('studentDetailModal').classList.add('show');
             console.log('👁️ Mostrando detalle de:', estudiante.name || estudiante.nombre);
@@ -806,45 +842,45 @@
         // ========================================
         function exportarExcelEstudiante() {
             // Si no se pasa studentKey, usar el currentStudentId del modal
-        const estudianteId = studentKey || currentStudentId;
+            const estudianteId = studentKey || currentStudentId;
             if (!estudianteId) {
-        showNotification('No hay estudiante seleccionado', 'warning');
-            return;
-        }
-            
+                showNotification('No hay estudiante seleccionado', 'warning');
+                return;
+            }
+
             const estudiante = allStudents.find(e => (e.matricula || e.id) === currentStudentId);
             const records = attendanceRecords[currentStudentId] || [];
-            
+
             // Prepare data for Excel
             const data = records.map(record => ({
                 'Fecha': formatDate(record.fecha),
                 'Estado': record.estado === 'attended' ? 'Recibió' : record.estado === 'not-received' ? 'No Recibió' : 'No Asistió',
                 'Novedad': record.novedad || '-'
             }));
-            
+
             // Create workbook
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.json_to_sheet(data);
-            
+
             // Auto-size columns
             ws['!cols'] = [{ wch: 15 }, { wch: 15 }, { wch: 40 }];
-            
+
             XLSX.utils.book_append_sheet(wb, ws, 'Historial');
-            
+
             // Generate filename
             const nombre = estudiante.name || estudiante.nombre || 'Estudiante';
             const filename = `Historial_${nombre.replace(/ /g, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`;
-            
+
             // Save file
             XLSX.writeFile(wb, filename);
-            
+
             showNotification('Archivo Excel generado exitosamente', 'success');
             console.log('📊 Excel individual generado:', filename);
         }
 
         function exportarExcelCompleto() {
             console.log('📊 Generando Excel completo...');
-            
+
             // Prepare data for Excel
             const data = [];
             filteredStudents.forEach(estudiante => {
@@ -855,9 +891,9 @@
                 const diasNoAsistio = records.filter(r => r.estado === 'absent').length;
                 const totalDias = records.length;
                 const porcentaje = totalDias > 0 ? ((diasRecibio / totalDias) * 100).toFixed(1) : 0;
-                
+
                 const sede = BARROBLANCO_DATA.methods.getSedeById(estudiante.sede);
-                
+
                 data.push({
                     'Nombre': estudiante.name || estudiante.nombre || 'Sin nombre',
                     'Matrícula': estudiante.matricula || estudiante.id,
@@ -870,19 +906,19 @@
                     '% Asistencia': porcentaje
                 });
             });
-            
+
             // Create workbook
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.json_to_sheet(data);
-            
+
             // Auto-size columns
             ws['!cols'] = [
                 { wch: 40 }, { wch: 15 }, { wch: 10 }, { wch: 20 },
                 { wch: 15 }, { wch: 18 }, { wch: 18 }, { wch: 12 }, { wch: 15 }
             ];
-            
+
             XLSX.utils.book_append_sheet(wb, ws, 'Resumen General');
-            
+
             // Add detailed sheet for filtered students (max 30)
             const grupoFiltro = document.getElementById('grupoFilter').value;
             if (grupoFiltro && filteredStudents.length <= 30) {
@@ -894,24 +930,24 @@
                         'Estado': record.estado === 'attended' ? 'Recibió' : record.estado === 'not-received' ? 'No Recibió' : 'No Asistió',
                         'Novedad': record.novedad || '-'
                     }));
-                    
+
                     const detailWs = XLSX.utils.json_to_sheet(detailData);
                     detailWs['!cols'] = [{ wch: 15 }, { wch: 15 }, { wch: 40 }];
-                    
+
                     // Sheet name limited to 31 chars
                     const nombre = estudiante.name || estudiante.nombre || 'Sin nombre';
                     const sheetName = nombre.substring(0, 31);
                     XLSX.utils.book_append_sheet(wb, detailWs, sheetName);
                 });
             }
-            
+
             // Generate filename
             const grupoTexto = grupoFiltro ? `Grupo_${grupoFiltro}` : 'Todos_los_Grupos';
             const filename = `Reporte_PAE_${grupoTexto}_${new Date().toISOString().split('T')[0]}.xlsx`;
-            
+
             // Save file
             XLSX.writeFile(wb, filename);
-            
+
             showNotification('Archivo Excel generado exitosamente', 'success');
             console.log('📊 Excel completo generado:', filename);
         }
@@ -943,9 +979,9 @@
                     </button>
                 </div>
             `;
-            
+
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.remove();
             }, 3000);
@@ -958,11 +994,12 @@
         }
 
         // Close modal when clicking outside
-        document.getElementById('studentDetailModal').addEventListener('click', function(e) {
+        document.getElementById('studentDetailModal').addEventListener('click', function (e) {
             if (e.target === this) {
                 cerrarModalDetalle();
             }
         });
     </script>
 </body>
+
 </html>
