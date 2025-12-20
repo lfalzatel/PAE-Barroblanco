@@ -946,9 +946,18 @@ fetch("js/estudiantes-bachillerato.json")
                                 </div>
                                 <p class="text-gray-600 text-xs">${student.grade}</p>
                                 <p class="text-gray-500 text-xs">ID: ${student.id}</p>
-                                <span class="status-badge badge-${status} mt-2">
-                                    ${getStatusIcon(status)} ${getStatusText(status)}
-                                </span>
+                                <div class="flex items-center mt-2 space-x-2">
+                                    <span class="status-badge badge-${status}">
+                                        ${getStatusIcon(status)} ${getStatusText(status)}
+                                    </span>
+                                    ${status !== 'pending' && isActive ? `
+                                        <input type="time" 
+                                            value="${statusData.timestamp ? new Date(statusData.timestamp).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: false }) : ''}"
+                                            onchange="updateAttendanceTime('${student.id}', this.value)"
+                                            class="text-xs border border-gray-300 rounded px-1 py-0.5 w-20 text-center focus:ring-1 focus:ring-blue-500"
+                                            title="Hora de asistencia">
+                                    ` : ''}
+                                </div>
                                 ${!isActive ? '<span class="ml-2 text-xs font-bold text-gray-500"></span>' : ''}
                             </div>
                         </div>
@@ -1020,6 +1029,17 @@ fetch("js/estudiantes-bachillerato.json")
 
             const student = filteredStudents.find(s => s.id === studentId);
             showNotification(`Asistencia registrada: ${student.name} - ${getStatusText(status)}`, 'success');
+        }
+
+        function updateAttendanceTime(studentId, timeStr) {
+            if (!timeStr || !attendanceStatus[studentId]) return;
+
+            const currentDate = new Date();
+            const [hours, minutes] = timeStr.split(':');
+            currentDate.setHours(parseInt(hours), parseInt(minutes));
+
+            attendanceStatus[studentId].timestamp = currentDate.toISOString();
+            showNotification('Hora actualizada', 'success');
         }
 
         function markAllStatus(status) {
