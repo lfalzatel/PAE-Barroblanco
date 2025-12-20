@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Estudiantes - PAE Barroblanco</title>
+    <title>Estudiantes - PAE Barroblanco</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- ⚠️ IMPORTANTE: Este archivo debe estar en la carpeta js/ -->
     <script src="js/barroblanco-data.js"></script>
     <style>
@@ -136,19 +136,19 @@
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg fixed w-full top-0 z-50 no-print">
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Logo y Nombre -->
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-qrcode text-blue-800 text-2xl mr-3"></i>
-                        <span class="text-xl font-bold text-gray-800">Barroblanco PAE</span>
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-utensils text-white text-lg"></i>
                     </div>
-                </div>                
-                <!-- Desktop Navigation -->
-                <!-- esta clase pone en azul y con una linea debajo el item seleccionado class"nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2" -->
-                <div class="desktop-nav flex items-center space-x-6">
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">PAE Barroblanco</h1>
+                        <p class="text-xs text-gray-500">Gestión de Estudiantes</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
                     <a href="index.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-home mr-2"></i>Inicio</a>
                     <a href="registro-mejorado.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
@@ -159,8 +159,9 @@
                         <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
                     <a href="estudiantes-barroblanco.html" class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
                         <i class="fas fa-users mr-2"></i>Estudiantes</a>
+                    <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Salir</button>
                 </div>
-                
                 <!-- Mobile Navigation Button -->
                 <div class="mobile-nav-button flex items-center">
                     <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-800 p-2">
@@ -169,7 +170,6 @@
                 </div>
             </div>
         </div>
-        
         <!-- Mobile Menu -->
         <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 ">
             <div class="py-4">
@@ -183,6 +183,8 @@
                     <i class="fas fa-chart-bar mr-3"></i>Reportes</a>
                 <a href="estudiantes-barroblanco.html" class="mobile-nav-item text-blue-800">
                     <i class="fas fa-users mr-3"></i>Estudiantes</a>
+                <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-3"></i>Salir</button>
             </div>
         </div>
     </nav>
@@ -947,6 +949,12 @@
             setTimeout(() => {
                 notification.remove();
             }, 3000);
+        }
+        // Logout
+        function logout() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                AUTH_SYSTEM.logout();
+            }
         }
 
         // Close modal when clicking outside

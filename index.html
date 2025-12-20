@@ -3,49 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barroblanco - Sistema de Asistencia PAE</title>
+    <title>Dashboard - PAE Barroblanco</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="js/barroblanco-data.js"></script>
-   <style>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         * {
             font-family: 'Inter', sans-serif;
         }
         
-        .hero-bg {
-            background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%);
-        }
-        
-        .card-hover {
+        .stat-card {
             transition: all 0.3s ease;
         }
         
-        .card-hover:hover {
+        .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
         
         .gradient-text {
             background: linear-gradient(135deg, #22c55e, #3b82f6);
-            /* background: linear-gradient(135deg, #1e3a8a, #3b82f6); */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        /* Mobile Menu */
         .mobile-menu {
             transform: translateX(-100%);
             transition: transform 0.3s ease;
@@ -55,65 +39,68 @@
             transform: translateX(0);
         }
         
-        .mobile-nav-item {
-            padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            display: block;
-            text-decoration: none;
-            color: #374151;
-            font-weight: 500;
-        }
-        
-        .mobile-nav-item:hover {
-            background-color: #f3f4f6;
-            color: #1e3a8a;
-        }
-        
         @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            .mobile-nav-button {
-                display: block;
-            }
+            .desktop-nav { display: none; }
+            .mobile-nav-button { display: block; }
         }
         
         @media (min-width: 769px) {
-            .mobile-nav-button {
-                display: none;
-            }
+            .mobile-nav-button { display: none; }
         }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg fixed w-full top-0 z-50 no-print">
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Logo y Nombre -->
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-qrcode text-blue-800 text-2xl mr-3"></i>
-                        <span class="text-xl font-bold text-gray-800">Barroblanco PAE</span>
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-utensils text-white text-lg"></i>
                     </div>
-                </div>                
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">PAE Barroblanco</h1>
+                        <p class="text-xs text-gray-500">Dashboard</p>
+                    </div>
+                </div>
+                
                 <!-- Desktop Navigation -->
-                <!-- esta clase pone en azul y con una linea debajo el item seleccionado class"nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2" -->
                 <div class="desktop-nav flex items-center space-x-6">
-                    <a href="index.html" class="nav-link text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2 bg-blue-50 rounded-lg">
-                        <i class="fas fa-home mr-2"></i>Inicio</a>
-                    <a href="registro-mejorado.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
-                        <i class="fas fa-clipboard-check mr-2"></i>Registro</a>
-                    <a href="qr-generator.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
-                        <i class="fas fa-qrcode mr-2"></i>Códigos QR</a>
-                    <a href="reportes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
-                        <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
-                    <a href="estudiantes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
-                        <i class="fas fa-users mr-2"></i>Estudiantes</a>
+                    <a href="index.html" class="text-blue-800 font-semibold border-b-2 border-blue-800 pb-1 px-3 py-2">
+                        <i class="fas fa-home mr-2"></i>Inicio
+                    </a>
+                    <a href="registro-mejorado.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
+                        <i class="fas fa-clipboard-check mr-2"></i>Registro
+                    </a>
+                    <a href="qr-generator.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
+                        <i class="fas fa-qrcode mr-2"></i>Códigos QR
+                    </a>
+                    <a href="reportes-barroblanco.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
+                        <i class="fas fa-chart-bar mr-2"></i>Reportes
+                    </a>
+                    <a href="estudiantes-barroblanco.html" class="text-gray-600 hover:text-blue-800 transition-colors px-3 py-2">
+                        <i class="fas fa-users mr-2"></i>Estudiantes
+                    </a>
+                    <div class="relative">
+                        <button onclick="toggleUserMenu()" class="flex items-center space-x-2 text-gray-700 hover:text-blue-800">
+                            <img id="userAvatar" src="" alt="User" class="w-8 h-8 rounded-full">
+                            <span id="userName" class="font-medium"></span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                            <div class="px-4 py-2 border-b">
+                                <p class="text-sm font-semibold text-gray-900" id="userNameFull"></p>
+                                <p class="text-xs text-gray-500" id="userRole"></p>
+                            </div>
+                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Mobile Navigation Button -->
-                <div class="mobile-nav-button flex items-center">
+                <div class="mobile-nav-button">
                     <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-800 p-2">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
@@ -122,24 +109,36 @@
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 ">
+        <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40">
             <div class="py-4">
-                <a href="index.html" class="mobile-nav-item text-blue-800">
-                    <i class="fas fa-home mr-3"></i>Inicio</a>
-                <a href="registro-mejorado.html" class="mobile-nav-item">
-                    <i class="fas fa-clipboard-check mr-3"></i>Registro</a>
-                <a href="qr-generator.html" class="mobile-nav-item active">
-                    <i class="fas fa-qrcode mr-3"></i>Códigos QR</a>
-                <a href="reportes-barroblanco.html" class="mobile-nav-item">
-                    <i class="fas fa-chart-bar mr-3"></i>Reportes</a>
-                <a href="estudiantes-barroblanco.html" class="mobile-nav-item">
-                    <i class="fas fa-users mr-3"></i>Estudiantes</a>
+                <a href="index.html" class="block px-4 py-3 text-blue-800 bg-blue-50 border-l-4 border-blue-800">
+                    <i class="fas fa-home mr-3"></i>Inicio
+                </a>
+                <a href="registro-mejorado.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-clipboard-check mr-3"></i>Registro
+                </a>
+                <a href="qr-generator.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-qrcode mr-3"></i>Códigos QR
+                </a>
+                <a href="reportes-barroblanco.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-chart-bar mr-3"></i>Reportes
+                </a>
+                <a href="estudiantes-barroblanco.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-users mr-3"></i>Estudiantes
+                </a>
+                <div class="border-t mt-4 pt-4 px-4">
+                    <p class="text-sm font-semibold text-gray-900" id="mobileUserName"></p>
+                    <p class="text-xs text-gray-500 mb-2" id="mobileUserRole"></p>
+                    <button onclick="logout()" class="w-full py-2 px-4 bg-red-600 text-white rounded-lg text-sm">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-bg pt-20 pb-12">
+    <section class="pt-20 pb-12 bg-gradient-to-r from-blue-50 to-indigo-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
@@ -151,21 +150,42 @@
                         Control de asistencia, registro de novedades y reportes detallados para las tres sedes.
                     </p>
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <button onclick="window.location.href='registro-mejorado.html'" class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-colors card-hover">
+                        <button onclick="window.location.href='registro-mejorado.html'" class="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-medium transition-all">
                             <i class="fas fa-clipboard-list mr-2"></i>Registrar Asistencia
                         </button>
-                        <button onclick="window.location.href='qr-registro.html'" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition-colors card-hover">
-                            <i class="fas fa-qrcode mr-2"></i>Auto-registro QR
+                        <button onclick="window.location.href='qr-generator.html'" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition-all">
+                            <i class="fas fa-qrcode mr-2"></i>Generar QR
                         </button>
                     </div>
                 </div>
-                <div class="relative">
-                    <img src="resources/hero-cafeteria.jpg" alt="Cafetería escolar Barroblanco" class="rounded-2xl shadow-2xl w-full h-96 object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
-                    <div class="absolute bottom-4 left-4 text-white">
-                        <p class="text-sm font-medium">Barroblanco Institución Educativa</p>
-                        <p class="text-xs opacity-80">Rionegro, Antioquia</p>
+                <div class="relative rounded-2xl shadow-2xl overflow-hidden h-auto" 
+                    style="background-image: url('resources/hero-cafeteria.jpg'); background-size: cover; background-position: center;">
+    
+                <!-- Overlay semi-transparente -->
+                <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+    
+                <!-- Contenido -->
+                <div class="relative z-10 p-10">
+                    <h3 class="text-2xl font-bold text-white mb-4">Estadísticas de Hoy</h3>
+                    <div class="space-y-2 bg-white bg-opacity-80 rounded-xl p-6">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Total Estudiantes</span>
+                            <span class="text-2xl font-bold text-blue-800" id="totalStudents">-</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Recibieron Alimento</span>
+                            <span class="text-2xl font-bold text-green-600" id="presentToday">-</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Ausentes</span>
+                            <span class="text-2xl font-bold text-red-600" id="absentToday">-</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Tasa de Asistencia</span>
+                            <span class="text-2xl font-bold text-purple-600" id="attendanceRate">-</span>
+                        </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -227,9 +247,9 @@
                     </div>
                 </div>
             </div>
+            
         </div>
     </section>
-
     <!-- Dashboard Stats -->
     <section class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -299,48 +319,32 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <!-- Attendance Chart -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Tendencia de Asistencia</h3>
-                    <div id="attendanceChart" style="height: 300px;"></div>
-                </div>
-
-                <!-- Sedes Comparison -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Asistencia por Sede</h3>
-                    <div id="sedeChart" style="height: 300px;"></div>
-                </div>
-            </div>
-
             <!-- Quick Actions -->
             <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
                 <h3 class="text-xl font-semibold text-gray-800 mb-6">Acciones Rápidas</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <button onclick="window.location.href='registro.html'" class="flex items-center justify-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='registro-mejorado.html'" class="flex items-center justify-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
                         <i class="fas fa-clipboard-list text-blue-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Registrar Asistencia</div>
                             <div class="text-sm text-gray-600">Por grupo y sede</div>
                         </div>
                     </button>
-                    <button onclick="window.location.href='qr-registro.html'" class="flex items-center justify-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='qr-generator.html'" class="flex items-center justify-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
                         <i class="fas fa-qrcode text-green-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Auto-registro QR</div>
                             <div class="text-sm text-gray-600">Para estudiantes</div>
                         </div>
                     </button>
-                    <button onclick="window.location.href='reportes.html'" class="flex items-center justify-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='reportes-barroblanco.html'" class="flex items-center justify-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors">
                         <i class="fas fa-chart-bar text-purple-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Ver Reportes</div>
                             <div class="text-sm text-gray-600">Estadísticas y datos</div>
                         </div>
                     </button>
-                    <button onclick="window.location.href='estudiantes.html'" class="flex items-center justify-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
+                    <button onclick="window.location.href='estudiantes-barroblanco.html'" class="flex items-center justify-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors">
                         <i class="fas fa-users text-yellow-600 text-2xl mr-3"></i>
                         <div class="text-left">
                             <div class="font-semibold text-gray-800">Gestionar Estudiantes</div>
@@ -349,68 +353,92 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Recent Activity -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6">Actividad Reciente</h3>
-                <div class="space-y-4" id="recentActivity">
-                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
-                        <div class="bg-green-100 p-2 rounded-full mr-4">
-                            <i class="fas fa-user-check text-green-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800">Valentina Jurado H - Grado 1101</p>
-                            <p class="text-sm text-gray-600">Sede Principal • Recibió alimento • Hace 5 minutos</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
-                        <div class="bg-red-100 p-2 rounded-full mr-4">
-                            <i class="fas fa-user-times text-red-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800">Carlos Rodríguez L - Grado 1101</p>
-                            <p class="text-sm text-gray-600">Sede Principal • No recibió (Alergia) • Hace 12 minutos</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
-                        <div class="bg-blue-100 p-2 rounded-full mr-4">
-                            <i class="fas fa-file-export text-blue-600"></i>
-                        </div>
-                        <div class="flex-1">
-                            <p class="font-medium text-gray-800">Reporte Diario Generado</p>
-                            <p class="text-sm text-gray-600">Consolidado por sedes • Hace 1 hora</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-16">
+    <footer class="bg-gray-800 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar. Todos los derechos reservados.</p>
-            <p class="text-gray-500 text-sm mt-2">Rionegro, Antioquia - Colombia</p>
+            <p class="text-gray-400">&copy; 2024 Barroblanco Institución Educativa - Programa de Alimentación Escolar.</p>
+            <p class="text-gray-500 text-sm mt-2">Rionegro, Antioquia, Colombia</p>
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/barroblanco-data.js"></script>
     <script>
-        // Mobile menu functionality
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('show');
+        // Check authentication
+        AUTH_SYSTEM.init();
+        AUTH_SYSTEM.checkSession();
+
+        // Load user info
+        function loadUserInfo() {
+            const user = AUTH_SYSTEM.getCurrentUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Set user info in navigation
+            document.getElementById('userAvatar').src = user.avatar;
+            document.getElementById('userName').textContent = user.name.split(' ')[0];
+            document.getElementById('userNameFull').textContent = user.name;
+            document.getElementById('userRole').textContent = AUTH_SYSTEM.getRoleName(user.role);
+            document.getElementById('mobileUserName').textContent = user.name;
+            document.getElementById('mobileUserRole').textContent = AUTH_SYSTEM.getRoleName(user.role);
+
+            // Hide options based on role
+            if (user.role === 'docente') {
+                // Docentes no pueden generar QR ni gestionar estudiantes
+                const qrLinks = document.querySelectorAll('a[href="qr-generator.html"]');
+                const estudiantesLinks = document.querySelectorAll('a[href="estudiantes-barroblanco.html"]');
+                qrLinks.forEach(link => link.style.display = 'none');
+                estudiantesLinks.forEach(link => link.style.display = 'none');
+            }
         }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
-            const mobileMenu = document.getElementById('mobileMenu');
-            const mobileButton = document.querySelector('.mobile-nav-button button');
-            
-            if (!mobileMenu.contains(e.target) && !mobileButton.contains(e.target)) {
-                mobileMenu.classList.remove('show');
-            }
-        });
+        // Toggle user menu
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('hidden');
+        }
 
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('show');
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                AUTH_SYSTEM.logout();
+            }
+        }
+
+        // Load statistics
+        async function loadStatistics() {
+            try {
+                await cargarDatosPAE();
+                
+                const totalStudents = BARROBLANCO_DATA.students.length;
+                const presentToday = Math.floor(totalStudents * 0.93);
+                const absentToday = totalStudents - presentToday;
+                const attendanceRate = ((presentToday / totalStudents) * 100).toFixed(1);
+
+                document.getElementById('totalStudents').textContent = totalStudents.toLocaleString();
+                document.getElementById('presentToday').textContent = presentToday.toLocaleString();
+                document.getElementById('absentToday').textContent = absentToday.toLocaleString();
+                document.getElementById('attendanceRate').textContent = attendanceRate + '%';
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            loadStatistics();
+        });
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             // Animate stats on load
@@ -511,11 +539,14 @@
             }, 2000);
         }, 10000);
 
-        // Responsive chart resize
-        window.addEventListener('resize', function() {
-            attendanceChart.resize();
-            sedeChart.resize();
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            if (!event.target.closest('.relative') && !userMenu.classList.contains('hidden')) {
+                userMenu.classList.add('hidden');
+            }
         });
+        
     </script>
 </body>
 </html>

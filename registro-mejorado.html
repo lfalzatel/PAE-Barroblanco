@@ -282,6 +282,8 @@ fetch("js/estudiantes-bachillerato.json")
                         <i class="fas fa-chart-bar mr-2"></i>Reportes</a>
                     <a href="estudiantes-barroblanco.html" class="nav-link text-gray-600 hover:text-blue-800 transition-colors px-3 py-2 rounded-md">
                         <i class="fas fa-users mr-2"></i>Estudiantes</a>
+                    <button onclick="AUTH_SYSTEM.logout()" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Salir</button>
                 </div>
                 
                 <!-- Mobile Navigation Button -->
@@ -390,6 +392,7 @@ fetch("js/estudiantes-bachillerato.json")
                 <!-- Students will be loaded here -->
             </div>
         </div>
+        
     </section>
 
     <!-- Novelty Modal -->
@@ -487,7 +490,12 @@ fetch("js/estudiantes-bachillerato.json")
             </div>
         </div>
     </div>
-
+    <div class="flex justify-center mt-6">
+    <button onclick="saveAttendance()" class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-save mr-2"></i>Guardar Registro
+    </button>
+    </div>
+</body>
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -1177,6 +1185,12 @@ fetch("js/estudiantes-bachillerato.json")
             setTimeout(() => {
                 notification.remove();
             }, 3000);
+        }
+        // Logout
+        function logout() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                AUTH_SYSTEM.logout();
+            }
         }
     </script>
 </body>
