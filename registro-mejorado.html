@@ -246,17 +246,17 @@ fetch("js/estudiantes-bachillerato.json")
 
         @media (max-width: 1024px) {
             .desktop-nav {
-                display: none;
+                display: none !important;
             }
 
             .mobile-nav-button {
-                display: block;
+                display: block !important;
             }
         }
 
         @media (min-width: 1025px) {
             .mobile-nav-button {
-                display: none;
+                display: none !important;
             }
         }
     </style>
@@ -320,7 +320,8 @@ fetch("js/estudiantes-bachillerato.json")
                 <a href="estudiantes-barroblanco.html" class="mobile-nav-item">
                     <i class="fas fa-users mr-3"></i>Estudiantes</a>
                 <div class="border-t mt-4 pt-4 px-4">
-                    <button onclick="AUTH_SYSTEM.logout()" class="w-full py-2 px-4 bg-red-600 text-white rounded-lg text-sm">
+                    <button onclick="AUTH_SYSTEM.logout()"
+                        class="w-full py-2 px-4 bg-red-600 text-white rounded-lg text-sm">
                         <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
                     </button>
                 </div>
@@ -1265,6 +1266,12 @@ fetch("js/estudiantes-bachillerato.json")
                 notification.remove();
             }, 3000);
         }
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('show');
+        }
+
         // Logout
         function logout() {
             if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
